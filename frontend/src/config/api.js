@@ -1,20 +1,14 @@
 // API Configuration and Integration
 // ===========================================
 
-// Base API URL - Backend running on port 8000
+// Base API URL
 // In Vite, use import.meta.env instead of process.env
-// Use network IP or current hostname instead of localhost
 const getBackendURL = () => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL
   }
-  // Served on default HTTP/HTTPS port (e.g. nginx :80) → API is same-origin /api
-  const port = window.location.port
-  if (!port || port === '80' || port === '443') {
-    return `${window.location.protocol}//${window.location.hostname}/api`
-  }
-  // Direct Vite dev (:3005 etc.) → default backend port
-  return `${window.location.protocol}//${window.location.hostname}:8000/api`
+  // Normal local dev default
+  return 'http://localhost:8002/api'
 }
 
 export const API_BASE_URL = getBackendURL()

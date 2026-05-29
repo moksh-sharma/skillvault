@@ -14,8 +14,8 @@
 .invite-user-section {
   margin-bottom: 2rem;
   padding: 1.25rem;
-  background: rgba(127, 183, 176, 0.08);
-  border: 1px solid rgba(127, 183, 176, 0.25);
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(14, 165, 233, 0.25);
   border-radius: var(--radius-input, 8px);
 }
 
@@ -55,7 +55,7 @@
   min-width: 220px;
   padding: 0.5rem 0.75rem;
   font-size: 0.9rem;
-  border: 1px solid rgba(127, 183, 176, 0.4);
+  border: 1px solid rgba(14, 165, 233, 0.4);
   border-radius: var(--radius-input, 6px);
   background: #fff;
 }
@@ -132,7 +132,7 @@
   font-size: 0.9rem;
   font-family: inherit;
   line-height: 1.5;
-  border: 1px solid rgba(127, 183, 176, 0.4);
+  border: 1px solid rgba(14, 165, 233, 0.4);
   border-radius: var(--radius-input, 6px);
   resize: vertical;
   margin-bottom: 1rem;
@@ -226,8 +226,8 @@
 }
 
 .platform-admins-table thead tr {
-  background: linear-gradient(135deg, rgba(127, 183, 176, 0.35) 0%, rgba(127, 183, 176, 0.2) 100%);
-  border-bottom: 2px solid rgba(127, 183, 176, 0.5);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.35) 0%, rgba(14, 165, 233, 0.2) 100%);
+  border-bottom: 2px solid rgba(14, 165, 233, 0.5);
 }
 
 .platform-admins-table th {
@@ -243,12 +243,12 @@
 
 .platform-admins-table td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgba(127, 183, 176, 0.15);
+  border-bottom: 1px solid rgba(14, 165, 233, 0.15);
   vertical-align: middle;
 }
 
 .platform-admins-table tbody tr:hover {
-  background: rgba(127, 183, 176, 0.08);
+  background: rgba(14, 165, 233, 0.08);
 }
 
 .platform-admin-name {

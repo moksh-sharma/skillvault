@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { API_BASE_URL, getAdminNotifications } from '../config/api'
+import { APP_NAME, ADMIN_DASHBOARD_PATH } from '../config/brand'
+import { WOMEN_OWNED_LOGO_SRC, CACHE_LOGO_SRC } from '../config/brandAssets'
 import './Navbar.css'
 
 const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, showLogout = true, adminTabs, activeTab, setActiveTab, centerHeading }) => {
@@ -58,7 +60,7 @@ const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, show
   }, [notificationsOpen])
 
   const handleAdminToggle = () => {
-    navigate('/techbank')
+    navigate(ADMIN_DASHBOARD_PATH)
   }
 
   const handleLogout = async () => {
@@ -75,28 +77,47 @@ const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, show
     >
       <div className="navbar-container">
         <div className="navbar-left">
-          <img 
-            src="/Untitled-1.png" 
-            alt="Women Owned" 
+          <img
+            src={WOMEN_OWNED_LOGO_SRC}
+            alt="Women Owned"
             className="navbar-women-logo"
           />
-          <motion.h1
-            className="navbar-heading"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => !isPortalMode && navigate('/techbank')}
-            style={{ cursor: isPortalMode ? 'default' : 'pointer' }}
-          >
-            TechBankAI
-          </motion.h1>
+          {showProfile && (
+            <button
+              className="profile-button"
+              onClick={() => navigate('/profile')}
+              aria-label="Profile"
+            >
+              <div className="profile-avatar">
+                {userProfile?.profile_img ? (
+                  <img
+                    src={userProfile.profile_img.startsWith('http') ? userProfile.profile_img : `${API_BASE_URL.replace('/api', '')}${userProfile.profile_img}`}
+                    alt="Profile"
+                    className="navbar-avatar-img"
+                  />
+                ) : (
+                  userProfile?.name ? userProfile.name.charAt(0).toUpperCase() : 'U'
+                )}
+              </div>
+            </button>
+          )}
         </div>
 
-        {/* Center heading (e.g. role title on application page) */}
-        {centerHeading && (
-          <div className="navbar-center-heading">
+        <div className="navbar-brand-center">
+          {centerHeading ? (
             <h1 className="navbar-center-heading-text">{centerHeading}</h1>
-          </div>
-        )}
+          ) : (
+            <motion.h1
+              className="navbar-heading"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => !isPortalMode && navigate(ADMIN_DASHBOARD_PATH)}
+              style={{ cursor: isPortalMode ? 'default' : 'pointer' }}
+            >
+              {APP_NAME}
+            </motion.h1>
+          )}
+        </div>
 
         {/* Central Admin Tabs */}
         {props.adminTabs && (
@@ -170,25 +191,6 @@ const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, show
             </div>
           )}
 
-          {showProfile && (
-            <button
-              className="profile-button"
-              onClick={() => navigate('/profile')}
-            >
-              <div className="profile-avatar">
-                {userProfile?.profile_img ? (
-                  <img
-                    src={userProfile.profile_img.startsWith('http') ? userProfile.profile_img : `${API_BASE_URL.replace('/api', '')}${userProfile.profile_img}`}
-                    alt="P"
-                    className="navbar-avatar-img"
-                  />
-                ) : (
-                  userProfile?.name ? userProfile.name.charAt(0).toUpperCase() : 'U'
-                )}
-              </div>
-            </button>
-          )}
-
           {showLogout && (
             <button
               className="logout-button-nav"
@@ -199,9 +201,9 @@ const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, show
             </button>
           )}
 
-          <img 
-            src="/cache.png" 
-            alt="Cache" 
+          <img
+            src={CACHE_LOGO_SRC}
+            alt="CACHE"
             className="navbar-cache-logo"
           />
         </div>

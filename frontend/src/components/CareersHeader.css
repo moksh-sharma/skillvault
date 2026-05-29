@@ -1,5 +1,5 @@
 .careers-header {
-  background: #111827;
+  background: var(--color-text-dark);
   padding: 16px 0;
   position: sticky;
   top: 0;
@@ -82,12 +82,12 @@
 }
 
 .careers-btn-primary {
-  background: #1f2937;
+  background: var(--color-accent-teal);
   color: #fff;
 }
 
 .careers-btn-primary:hover {
-  background: #374151;
+  filter: brightness(1.1);
 }
 
 @media (max-width: 768px) {

@@ -633,8 +633,14 @@ async def list_resumes(
 ):
     """List all resumes with pagination and optional user type filtering"""
     try:
+        # Avoid async lazy-loads during response formatting (work_history/certificates/educations)
+        # by eager-loading relationships up-front.
         # Build base query
-        query = select(Resume)
+        query = select(Resume).options(
+            selectinload(Resume.work_history),
+            selectinload(Resume.certificates),
+            selectinload(Resume.educations),
+        )
         count_query = select(func.count(Resume.id))
         
         # Filter by user types if provided

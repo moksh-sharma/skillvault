@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { getProfile, uploadProfilePhoto, removeProfilePhoto, deletePlatformUser, API_BASE_URL } from '../config/api'
+import { ADMIN_DASHBOARD_PATH } from '../config/brand'
 import Navbar from '../components/Navbar'
 import CyberBackground from '../components/admin/CyberBackground'
 import './Profile.css'
@@ -51,7 +52,7 @@ const Profile = () => {
 
   const handleImageRemove = async () => {
     if (!userProfile?.profile_img) return
-    
+
     try {
       setLoading(true)
       setError('')
@@ -150,7 +151,7 @@ const Profile = () => {
                 />
               </div>
               <div className="avatar-action-buttons">
-                <button 
+                <button
                   className="avatar-action-btn upload-btn"
                   onClick={triggerFileInput}
                   disabled={loading}
@@ -158,7 +159,7 @@ const Profile = () => {
                 >
                   📷
                 </button>
-                <button 
+                <button
                   className="avatar-action-btn remove-btn"
                   onClick={handleImageRemove}
                   disabled={loading || !userProfile?.profile_img}
@@ -227,7 +228,7 @@ const Profile = () => {
 
           {/* Actions */}
           <div className="profile-footer-cyber">
-            <button className="cyber-btn primary" onClick={() => navigate('/techbank')}>
+            <button className="cyber-btn primary" onClick={() => navigate(ADMIN_DASHBOARD_PATH)}>
               Back to Dashboard
             </button>
             <button className="cyber-btn danger" onClick={() => { logout(); navigate('/'); }}>

@@ -1,4 +1,5 @@
 """Ollama service for AI-powered parsing and matching."""
+import asyncio
 import json
 import httpx
 from typing import Dict, List
@@ -7,10 +8,22 @@ from src.config.settings import settings
 
 logger = get_logger(__name__)
 
+
+def _normalize_ollama_base_url(url: str) -> str:
+    """Strip trailing slashes and accidental /v1 suffix (code appends /api/chat itself)."""
+    base = (url or "").strip().rstrip("/")
+    if base.endswith("/v1"):
+        base = base[:-3]
+    return base.rstrip("/")
+
+
 # Ollama configuration from settings
-OLLAMA_BASE_URL = settings.ollama_base_url.rstrip("/")
+OLLAMA_BASE_URL = _normalize_ollama_base_url(settings.ollama_base_url)
 OLLAMA_MODEL = settings.ollama_model
 OLLAMA_MAX_TOKENS = settings.ollama_max_tokens
+OLLAMA_READ_TIMEOUT = float(settings.ollama_read_timeout)
+OLLAMA_CONNECT_TIMEOUT = float(settings.ollama_connect_timeout)
+OLLAMA_MAX_RETRIES = max(0, int(settings.ollama_max_retries))
 # Backward-compatible aliases used in other modules
 OPENAI_MODEL = OLLAMA_MODEL
 
@@ -66,36 +79,68 @@ async def _ollama_chat_json(system_prompt: str, user_prompt: str, max_tokens: in
         },
     }
     fallback_model = _fallback_ollama_model(OLLAMA_MODEL)
-    try:
-        async with httpx.AsyncClient(timeout=120.0) as client:
-            response = await client.post(f"{OLLAMA_BASE_URL}/api/chat", json=ollama_payload)
-            if response.status_code == 404 and fallback_model != OLLAMA_MODEL:
-                ollama_payload["model"] = fallback_model
+    timeout = httpx.Timeout(
+        connect=OLLAMA_CONNECT_TIMEOUT,
+        read=OLLAMA_READ_TIMEOUT,
+        write=30.0,
+        pool=10.0,
+    )
+    last_error = None
+
+    for attempt in range(OLLAMA_MAX_RETRIES + 1):
+        try:
+            async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.post(f"{OLLAMA_BASE_URL}/api/chat", json=ollama_payload)
-            if response.status_code == 404:
-                openai_compatible_payload["model"] = ollama_payload["model"]
-                response = await client.post(
-                    f"{OLLAMA_BASE_URL}/v1/chat/completions",
-                    json=openai_compatible_payload,
+                if response.status_code == 404 and fallback_model != OLLAMA_MODEL:
+                    ollama_payload["model"] = fallback_model
+                    response = await client.post(f"{OLLAMA_BASE_URL}/api/chat", json=ollama_payload)
+                if response.status_code == 404:
+                    openai_compatible_payload["model"] = ollama_payload["model"]
+                    response = await client.post(
+                        f"{OLLAMA_BASE_URL}/v1/chat/completions",
+                        json=openai_compatible_payload,
+                    )
+                if response.status_code == 404:
+                    ollama_generate_payload["model"] = ollama_payload["model"]
+                    response = await client.post(
+                        f"{OLLAMA_BASE_URL}/api/generate",
+                        json=ollama_generate_payload,
+                    )
+                response.raise_for_status()
+                data = response.json()
+                content = (
+                    ((data.get("message") or {}).get("content") or "").strip()
+                    or (
+                        ((data.get("choices") or [{}])[0].get("message") or {}).get("content") or ""
+                    ).strip()
+                    or (data.get("response") or "").strip()
                 )
-            if response.status_code == 404:
-                ollama_generate_payload["model"] = ollama_payload["model"]
-                response = await client.post(
-                    f"{OLLAMA_BASE_URL}/api/generate",
-                    json=ollama_generate_payload,
+                if not content:
+                    raise ValueError("Empty response from Ollama")
+                return json.loads(content)
+        except json.JSONDecodeError as json_error:
+            raise ValueError(f"Invalid JSON response from Ollama: {json_error}") from json_error
+        except (httpx.TimeoutException, httpx.ConnectError, httpx.ReadError) as e:
+            last_error = e
+            if attempt < OLLAMA_MAX_RETRIES:
+                wait_s = 2 ** attempt
+                logger.warning(
+                    "Ollama request failed (%s), retry %s/%s in %ss",
+                    type(e).__name__,
+                    attempt + 1,
+                    OLLAMA_MAX_RETRIES,
+                    wait_s,
                 )
-            response.raise_for_status()
-            data = response.json()
-            content = (
-                ((data.get("message") or {}).get("content") or "").strip()
-                or (((data.get("choices") or [{}])[0].get("message") or {}).get("content") or "").strip()
-                or (data.get("response") or "").strip()
-            )
-            if not content:
-                raise ValueError("Empty response from Ollama")
-            return json.loads(content)
-    except json.JSONDecodeError as json_error:
-        raise ValueError(f"Invalid JSON response from Ollama: {json_error}") from json_error
+                await asyncio.sleep(wait_s)
+                continue
+            raise
+        except httpx.HTTPStatusError as e:
+            last_error = e
+            raise
+
+    if last_error:
+        raise last_error
+    raise RuntimeError("Ollama request failed with no response")
 
 
 async def parse_resume_with_gpt(resume_text: str) -> Dict:
@@ -592,10 +637,10 @@ async def extract_resume_evidence_v2(resume_data: Dict, jd_structure_v2: Dict) -
             line = f"{head}: {desc}" if head and desc else (head or desc)
             if line:
                 wh_lines.append(line)
-    work_history_block = "\n".join(wh_lines)[:2000]
+    work_history_block = "\n".join(wh_lines)[:1000]
 
-    # Larger raw text window (bounded)
-    raw_text_block = (resume_data.get("raw_text") or "")[:10000]
+    # Bounded raw text — smaller window keeps remote Ollama calls under timeout
+    raw_text_block = (resume_data.get("raw_text") or "")[:4000]
 
     system_prompt = """You are a Resume Evidence Extractor for ATS matching.
 

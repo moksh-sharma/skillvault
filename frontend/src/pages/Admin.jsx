@@ -90,7 +90,8 @@ const Admin = () => {
         </div>
       </div>
 
-      <HelpAssistant />
+      {/* Hide help assistant FAB for now */}
+      {import.meta.env.VITE_ENABLE_HELP_ASSISTANT === 'true' ? <HelpAssistant /> : null}
     </div>
   )
 }

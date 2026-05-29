@@ -13,8 +13,7 @@ const getPublicOrigin = () => {
   if (envOrigin) {
     return envOrigin.replace(/\/+$/, '')
   }
-  // Intentionally hide port in generated/copied links.
-  return `${window.location.protocol}//${window.location.hostname}`
+  return 'http://localhost:3005'
 }
 
 const getPortalPublicUrl = (path) => {

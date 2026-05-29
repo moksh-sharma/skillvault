@@ -1,8 +1,8 @@
-# Techbank.Ai - Frontend Routes Documentation
+# SkillVault - Frontend Routes Documentation
 
 ## Route Structure
 
-This document outlines all the routes in the Techbank.Ai frontend application.
+This document outlines all the routes in the SkillVault frontend application.
 
 ### Base Routes
 
@@ -34,7 +34,7 @@ Login → Dashboard (Select Employment Type) → Application (Upload CV + Fill I
 - **Component**: `src/pages/Dashboard.jsx`
 - **Purpose**: Main dashboard with employment type selection
 - **Features**:
-  - Navbar with "Techbank.Ai" heading
+  - Navbar with "SkillVault" heading
   - Profile button
   - Admin toggle button
   - 4 employment type cards directly on dashboard:
@@ -71,7 +71,7 @@ Login → Dashboard (Select Employment Type) → Application (Upload CV + Fill I
 #### Navbar
 - **Component**: `src/components/Navbar.jsx`
 - **Features**:
-  - Center heading: "Techbank.Ai" (clickable, navigates to dashboard)
+  - Center heading: "SkillVault" (clickable, navigates to dashboard)
   - Profile button (avatar with user initial)
   - Admin toggle button (when `showAdminToggle` prop is true)
 - **Used in**: Dashboard, EmploymentTypeSelection, CVUpload, PersonalInfo
@@ -91,7 +91,7 @@ The application uses React state for:
 ### Future Routes (To Be Implemented)
 
 - `/profile` - User profile page
-- `/techbank` - Admin dashboard (legacy `/admin` redirects to `/techbank`)
+- `/skillvault` - Admin dashboard (legacy `/admin` and `/techbank` redirect to `/skillvault`)
 - `/applications` - User's submitted applications
 - `/application/:id` - View specific application
 

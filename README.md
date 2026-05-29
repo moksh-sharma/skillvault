@@ -1,4 +1,4 @@
-# TechBank.Ai - Resume Screening Platform
+# SkillVault - Resume Screening Platform
 
 AI-Powered Resume Management and Job Description Analysis System
 

@@ -1,2 +1,2 @@
-"""TechBank.ai Backend - Main package."""
+"""SkillVault Backend - Main package."""
 

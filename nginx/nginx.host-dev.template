@@ -51,11 +51,17 @@ http {
             return 308 /employee/;
         }
 
+        location = /skillvault {
+            return 308 /skillvault/;
+        }
         location = /techbank {
-            return 308 /techbank/;
+            return 308 /skillvault/;
         }
         location ~ ^/admin(.*)$ {
-            return 308 /techbank$1;
+            return 308 /skillvault$1;
+        }
+        location ~ ^/techbank(.*)$ {
+            return 308 /skillvault$1;
         }
 
         # Portals (npm run dev:portals:proxy on host)

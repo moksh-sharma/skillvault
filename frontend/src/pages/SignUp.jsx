@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useApp } from '../context/AppContext'
 import { register, login } from '../config/api'
+import { APP_NAME, APP_TAGLINE } from '../config/brand'
+import { WOMEN_OWNED_LOGO_SRC, CACHE_LOGO_SRC } from '../config/brandAssets'
 import './SignUp.css'
 
 const SignUp = () => {
@@ -280,8 +282,8 @@ const SignUp = () => {
   return (
     <div className="signup-container">
       <div className="page-logos">
-        <img src="/Untitled-1.png" alt="Women Owned" className="logo-left" />
-        <img src="/cache.png" alt="Cache" className="logo-right" />
+        <img src={WOMEN_OWNED_LOGO_SRC} alt="Women Owned" className="logo-left" />
+        <img src={CACHE_LOGO_SRC} alt="CACHE" className="logo-right" />
       </div>
       <div className="animated-background">
         <div className="gradient-orb orb-1"></div>
@@ -302,8 +304,8 @@ const SignUp = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <h1 className="brand-title">Techbank.Ai</h1>
-          <p className="brand-tagline">Resume Screening Platform</p>
+          <h1 className="brand-title">{APP_NAME}</h1>
+          <p className="brand-tagline">{APP_TAGLINE}</p>
         </motion.div>
 
         <motion.h2
@@ -321,7 +323,7 @@ const SignUp = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          Join Techbank.Ai and start your journey
+          Join {APP_NAME} and start your journey
         </motion.p>
 
         <form onSubmit={handleSubmit} className="signup-form">

@@ -6,7 +6,6 @@
   justify-content: center;
   padding: 1rem;
   position: relative;
-  overflow: auto;
   background: transparent;
   box-sizing: border-box;
 }
@@ -51,7 +50,7 @@
   border-radius: var(--radius-card);
   padding: 28px 32px;
   box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(127, 183, 176, 0.2);
+  border: 1px solid rgba(14, 165, 233, 0.2);
   width: 100%;
   max-width: 500px;
   max-height: calc(100vh - 4rem);
@@ -99,12 +98,12 @@
 }
 
 .login-card::-webkit-scrollbar-thumb {
-  background: rgba(127, 183, 176, 0.5);
+  background: rgba(14, 165, 233, 0.5);
   border-radius: 10px;
 }
 
 .login-card::-webkit-scrollbar-thumb:hover {
-  background: rgba(127, 183, 176, 0.7);
+  background: rgba(14, 165, 233, 0.7);
 }
 
 .brand-header {
@@ -175,7 +174,7 @@
 
 .form-group input {
   padding: 0.75rem 0.9rem;
-  border: 1px solid rgba(127, 183, 176, 0.3);
+  border: 1px solid rgba(14, 165, 233, 0.3);
   border-radius: var(--radius-input);
   font-size: 0.95rem;
   color: var(--color-text-dark);
@@ -194,7 +193,7 @@
   outline: none;
   border-color: var(--color-accent-teal);
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 0 3px rgba(127, 183, 176, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.6);
 }
 
 .form-group input.error {
@@ -235,7 +234,7 @@
 .password-toggle:hover {
   color: var(--color-accent-teal);
   opacity: 1;
-  background: rgba(127, 183, 176, 0.15);
+  background: rgba(14, 165, 233, 0.15);
 }
 
 .login-button {
@@ -392,7 +391,7 @@
   padding: 0.75rem 1rem;
   padding-right: 2.25rem;
   border-radius: var(--radius-input);
-  border: 1px solid rgba(127, 183, 176, 0.3);
+  border: 1px solid rgba(14, 165, 233, 0.3);
   background-color: #ffffff !important;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232F2F2F' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important;
   background-repeat: no-repeat !important;

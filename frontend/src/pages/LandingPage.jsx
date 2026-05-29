@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useApp } from '../context/AppContext'
 import { login, isAdminRole } from '../config/api'
+import { APP_NAME, APP_TAGLINE, ADMIN_DASHBOARD_PATH } from '../config/brand'
+import { WOMEN_OWNED_LOGO_SRC, CACHE_LOGO_SRC } from '../config/brandAssets'
 import './LandingPage.css'
 
 const LandingPage = () => {
@@ -21,7 +23,7 @@ const LandingPage = () => {
         const checkAuth = async () => {
             if (isAuthenticated) {
                 if (isAdminRole(userProfile?.mode)) {
-                    navigate('/techbank', { replace: true })
+                    navigate(ADMIN_DASHBOARD_PATH, { replace: true })
                 } else {
                     await logout()
                 }
@@ -93,15 +95,15 @@ const LandingPage = () => {
                 email: data.user?.email || email,
                 mode: data.user?.mode || 'user',
                 profile_img: data.user?.profile_img || null,
-              employee_id: data.user?.employee_id || null,
-              created_at: data.user?.created_at || new Date().toISOString()
+                employee_id: data.user?.employee_id || null,
+                created_at: data.user?.created_at || new Date().toISOString()
             }
 
             if (isAdminRole(userProfileData.mode)) {
                 setIsAuthenticated(true)
                 setUserProfile(userProfileData)
                 sessionStorage.setItem('adminEntranceShown', 'true')
-                navigate('/techbank', { replace: true })
+                navigate(ADMIN_DASHBOARD_PATH, { replace: true })
             } else {
                 setAuthError('Access Denied: Admin credentials required.')
                 await logout()
@@ -137,8 +139,8 @@ const LandingPage = () => {
                 </div>
             )}
             <div className="page-logos">
-                <img src="/Untitled-1.png" alt="Women Owned" className="logo-left" />
-                <img src="/cache.png" alt="Cache" className="logo-right" />
+                <img src={WOMEN_OWNED_LOGO_SRC} alt="Women Owned" className="logo-left" />
+                <img src={CACHE_LOGO_SRC} alt="CACHE" className="logo-right" />
             </div>
             <motion.div
                 className="auth-page-wrapper"
@@ -154,10 +156,10 @@ const LandingPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                     >
-                        <h1 className="brand-title">TechBankAI</h1>
+                        <h1 className="brand-title">{APP_NAME}</h1>
                         <div className="brand-tagline">
                             <span className="powered-by-text">powered by</span>
-                            <img src="/cache.png" alt="Cache" className="cache-logo" />
+                            <img src={CACHE_LOGO_SRC} alt="CACHE" className="cache-logo" />
                         </div>
                     </motion.div>
 
@@ -179,7 +181,7 @@ const LandingPage = () => {
                                 value={email}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                placeholder="admin@techbank.ai"
+                                placeholder="admin@skillvault.com"
                                 className={errors.email ? 'error' : ''}
                                 autoComplete="off"
                             />
@@ -222,8 +224,8 @@ const LandingPage = () => {
                             type="submit"
                             className="login-button"
                             disabled={!isFormValid() || isLoading}
-                                whileHover={isFormValid() && !isLoading ? { scale: 1.02 } : {}}
-                                whileTap={isFormValid() && !isLoading ? { scale: 0.98 } : {}}
+                            whileHover={isFormValid() && !isLoading ? { scale: 1.02 } : {}}
+                            whileTap={isFormValid() && !isLoading ? { scale: 0.98 } : {}}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}

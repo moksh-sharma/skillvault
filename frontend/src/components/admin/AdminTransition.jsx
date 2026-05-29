@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { CACHE_LOGO_SRC } from '../../config/brandAssets'
 import './AdminTransition.css'
 
 const getTimeGreeting = () => {
@@ -18,7 +19,7 @@ const AdminTransition = ({ onComplete, userProfile, name: nameProp }) => {
   const screens = [
     { type: 'greeting', text: greeting },
     { type: 'name', text: userName },
-    { type: 'welcome', text: 'Welcome to the techbank' },
+    { type: 'welcome', text: 'Welcome to SkillVault' },
     { type: 'powered' }
   ]
 
@@ -68,7 +69,7 @@ const AdminTransition = ({ onComplete, userProfile, name: nameProp }) => {
                 className="transition-screen-powered-wrap"
               >
                 <span className="transition-powered-by-text transition-powered-by-text-centre">Powered by</span>
-                <img src="/cache.png" alt="Cache" className="transition-powered-by-logo transition-powered-by-logo-centre" />
+                <img src={CACHE_LOGO_SRC} alt="CACHE" className="transition-powered-by-logo transition-powered-by-logo-centre" />
               </motion.div>
             ) : (
               <motion.div

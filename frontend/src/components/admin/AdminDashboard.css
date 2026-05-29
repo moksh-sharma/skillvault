@@ -43,8 +43,8 @@
     align-items: center;
     gap: 8px;
     padding: 8px 16px;
-    background: rgba(127, 183, 176, 0.15);
-    border: 1px solid rgba(127, 183, 176, 0.35);
+    background: rgba(14, 165, 233, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.35);
     border-radius: var(--radius-input);
     color: var(--color-accent-teal);
     font-size: 0.85rem;
@@ -57,7 +57,7 @@
 }
 
 .outlook-sync-btn:hover:not(:disabled) {
-    background: rgba(127, 183, 176, 0.25);
+    background: rgba(14, 165, 233, 0.25);
     border-color: var(--color-accent-teal);
     box-shadow: var(--shadow-soft);
     transform: translateY(-2px);
@@ -137,7 +137,7 @@
     background: var(--color-card-surface);
     padding: 0.75rem 1.5rem;
     border-radius: var(--radius-button);
-    border: 1px solid rgba(127, 183, 176, 0.25);
+    border: 1px solid rgba(14, 165, 233, 0.25);
     box-shadow: var(--shadow-soft);
 }
 
@@ -149,7 +149,7 @@
 
 .premium-cyber-select {
     background-color: #ffffff;
-    border: 1px solid rgba(127, 183, 176, 0.35);
+    border: 1px solid rgba(14, 165, 233, 0.35);
     border-radius: var(--radius-input);
     padding: 0.5rem 1rem;
     font-weight: 600;
@@ -175,7 +175,7 @@
     outline: none;
     background-color: #ffffff;
     border-color: var(--color-accent-teal);
-    box-shadow: 0 0 0 3px rgba(127, 183, 176, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
 
 /* Stats Grid - 5 cards in one line, equal width */
@@ -186,10 +186,10 @@
 }
 
 .stat-card-new {
-    background: linear-gradient(135deg, rgba(127, 183, 176, 0.28) 0%, rgba(127, 183, 176, 0.1) 50%, var(--color-card-surface) 100%);
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.28) 0%, rgba(14, 165, 233, 0.1) 50%, var(--color-card-surface) 100%);
     border-radius: var(--radius-card);
     padding: 0.75rem 1rem;
-    border: 1px solid rgba(127, 183, 176, 0.3);
+    border: 1px solid rgba(14, 165, 233, 0.3);
     box-shadow: var(--shadow-soft);
     display: flex;
     align-items: center;
@@ -203,7 +203,7 @@
 .stat-card-new:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-floating);
-    border-color: rgba(127, 183, 176, 0.35);
+    border-color: rgba(14, 165, 233, 0.35);
 }
 
 .stat-icon-wrapper {
@@ -215,8 +215,8 @@
     justify-content: center;
     font-size: 1.25rem;
     flex-shrink: 0;
-    background: rgba(127, 183, 176, 0.15);
-    border: 1px solid rgba(127, 183, 176, 0.3);
+    background: rgba(14, 165, 233, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.3);
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
     color: var(--color-accent-teal);
 }
@@ -250,7 +250,7 @@
     margin-top: 0.25rem;
     padding: 4px 8px;
     border-radius: var(--radius-input);
-    background: rgba(216, 184, 146, 0.2);
+    background: rgba(56, 189, 248, 0.2);
     display: inline-block;
 }
 
@@ -265,7 +265,7 @@
     background: var(--color-card-surface);
     border-radius: var(--radius-card-clay);
     padding: 2rem;
-    border: 1px solid rgba(127, 183, 176, 0.2);
+    border: 1px solid rgba(14, 165, 233, 0.2);
     box-shadow: var(--shadow-clay);
     display: flex;
     flex-direction: column;
@@ -274,7 +274,7 @@
 
 .dashboard-section:hover {
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
-    border-color: rgba(127, 183, 176, 0.3);
+    border-color: rgba(14, 165, 233, 0.3);
     transform: translateY(-2px);
 }
 
@@ -299,9 +299,9 @@
     text-transform: uppercase;
     letter-spacing: 0.12em;
     padding: 4px 10px;
-    background: rgba(127, 183, 176, 0.08);
+    background: rgba(14, 165, 233, 0.08);
     border-radius: var(--radius-input);
-    border: 1px solid rgba(127, 183, 176, 0.2);
+    border: 1px solid rgba(14, 165, 233, 0.2);
 }
 
 /* Portal Links section */
@@ -374,18 +374,18 @@
     background: rgba(255, 255, 255, 0.25);
     border-radius: var(--radius-card-clay);
     padding: 1rem;
-    border: 1px solid rgba(127, 183, 176, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.15);
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
 
 .header-actions,
 .timeframe-toggles {
     display: flex;
-    background: rgba(127, 183, 176, 0.1);
+    background: rgba(14, 165, 233, 0.1);
     padding: 6px;
     border-radius: var(--radius-button);
     gap: 4px;
-    border: 1px solid rgba(127, 183, 176, 0.2);
+    border: 1px solid rgba(14, 165, 233, 0.2);
 }
 
 .toggle-btn {
@@ -402,11 +402,11 @@
 
 .toggle-btn:hover {
     color: var(--chart-text);
-    background: rgba(127, 183, 176, 0.12);
+    background: rgba(14, 165, 233, 0.12);
 }
 
 .toggle-btn.active {
-    background: rgba(127, 183, 176, 0.2);
+    background: rgba(14, 165, 233, 0.2);
     color: var(--chart-text);
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
@@ -509,10 +509,10 @@
 /* Records: only the container behind the table (not the header) – green like Employee List */
 .records-dashboard .records-table-section {
     background: linear-gradient(135deg,
-        rgba(127, 183, 176, 0.2) 0%,
-        rgba(127, 183, 176, 0.12) 50%,
-        rgba(127, 183, 176, 0.18) 100%);
-    border: 1px solid rgba(127, 183, 176, 0.35);
+        rgba(14, 165, 233, 0.2) 0%,
+        rgba(14, 165, 233, 0.12) 50%,
+        rgba(14, 165, 233, 0.18) 100%);
+    border: 1px solid rgba(14, 165, 233, 0.35);
     border-radius: 16px;
     padding: 1.25rem;
     overflow: hidden;
@@ -522,7 +522,7 @@
 .records-dashboard .records-table-section .table-container {
     border-radius: 12px;
     background: #ffffff;
-    border: 1px solid rgba(127, 183, 176, 0.25);
+    border: 1px solid rgba(14, 165, 233, 0.25);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -809,7 +809,7 @@
 
 .modal-content {
     background: var(--color-card-surface);
-    border: 1px solid rgba(127, 183, 176, 0.25);
+    border: 1px solid rgba(14, 165, 233, 0.25);
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-floating);
     width: 100%;
@@ -821,8 +821,8 @@
 
 .modal-header {
     padding: 24px 32px;
-    background: rgba(127, 183, 176, 0.08);
-    border-bottom: 1px solid rgba(127, 183, 176, 0.25);
+    background: rgba(14, 165, 233, 0.08);
+    border-bottom: 1px solid rgba(14, 165, 233, 0.25);
 }
 
 .candidate-profile-summary {
@@ -1019,7 +1019,7 @@
     font-weight: 600;
     color: var(--color-text-dark);
     margin-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(127, 183, 176, 0.3);
+    border-bottom: 1px solid rgba(14, 165, 233, 0.3);
     padding-bottom: 1rem;
 }
 
@@ -1088,7 +1088,7 @@
 
 .record-detail-modal .modal-content {
     background: var(--color-card-surface);
-    border: 1px solid rgba(127, 183, 176, 0.25);
+    border: 1px solid rgba(14, 165, 233, 0.25);
     box-shadow: var(--shadow-floating);
     color: var(--color-text-dark);
     display: flex;
@@ -1112,29 +1112,29 @@
 }
 
 .record-detail-modal .modal-body::-webkit-scrollbar-track {
-    background: rgba(127, 183, 176, 0.12);
+    background: rgba(14, 165, 233, 0.12);
     border-radius: 10px;
     margin: 4px 0;
 }
 
 .record-detail-modal .modal-body::-webkit-scrollbar-thumb {
-    background: rgba(127, 183, 176, 0.35);
+    background: rgba(14, 165, 233, 0.35);
     border-radius: 10px;
 }
 
 .record-detail-modal .modal-body::-webkit-scrollbar-thumb:hover {
-    background: rgba(127, 183, 176, 0.5);
+    background: rgba(14, 165, 233, 0.5);
 }
 
 .record-detail-modal .modal-header {
-    background: rgba(127, 183, 176, 0.08);
-    border-bottom: 1px solid rgba(127, 183, 176, 0.25);
+    background: rgba(14, 165, 233, 0.08);
+    border-bottom: 1px solid rgba(14, 165, 233, 0.25);
 }
 
 .record-detail-modal .profile-avatar-lg {
-    background: rgba(127, 183, 176, 0.2);
+    background: rgba(14, 165, 233, 0.2);
     color: var(--color-text-dark);
-    border: 1px solid rgba(127, 183, 176, 0.35);
+    border: 1px solid rgba(14, 165, 233, 0.35);
 }
 
 .record-detail-modal .profile-info-main h2,
@@ -1144,8 +1144,8 @@
 }
 
 .record-detail-modal .close-btn-new {
-    background: rgba(216, 184, 146, 0.25);
-    border: 1px solid rgba(127, 183, 176, 0.3);
+    background: rgba(56, 189, 248, 0.25);
+    border: 1px solid rgba(14, 165, 233, 0.3);
     color: var(--color-text-dark);
 }
 
@@ -1157,14 +1157,14 @@
 }
 
 .record-detail-modal .content-block h3 {
-    border-bottom-color: rgba(127, 183, 176, 0.3);
+    border-bottom-color: rgba(14, 165, 233, 0.3);
 }
 
 .record-detail-modal .info-mini-card,
 .record-detail-modal .status-box,
 .record-detail-modal .status-box.active {
-    background: rgba(216, 184, 146, 0.15);
-    border: 1px solid rgba(127, 183, 176, 0.3);
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.3);
     color: var(--color-text-dark);
 }
 
@@ -1177,8 +1177,8 @@
 
 .record-detail-modal .premium-skill-tag,
 .record-detail-modal .premium-cert-tag {
-    background: rgba(216, 184, 146, 0.2);
-    border: 1px solid rgba(127, 183, 176, 0.35);
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(14, 165, 233, 0.35);
     color: var(--color-text-dark);
 }
 
@@ -1219,8 +1219,8 @@
 .record-field-value {
     display: block;
     padding: 0.6rem 0.85rem;
-    background: rgba(127, 183, 176, 0.08);
-    border: 1px solid rgba(127, 183, 176, 0.22);
+    background: rgba(14, 165, 233, 0.08);
+    border: 1px solid rgba(14, 165, 233, 0.22);
     border-radius: var(--radius-input);
     font-size: 0.95rem;
     color: var(--color-text-muted);
@@ -1229,14 +1229,14 @@
 }
 
 .record-detail-modal .record-field-value.record-field-value-filled {
-    background: rgba(216, 184, 146, 0.25);
-    border-color: rgba(127, 183, 176, 0.3);
+    background: rgba(56, 189, 248, 0.25);
+    border-color: rgba(14, 165, 233, 0.3);
     color: var(--color-text-dark);
 }
 
 .record-detail-modal .record-field-block .record-field-value.record-field-value-filled {
-    background: rgba(216, 184, 146, 0.2);
-    border-color: rgba(127, 183, 176, 0.28);
+    background: rgba(56, 189, 248, 0.2);
+    border-color: rgba(14, 165, 233, 0.28);
     color: var(--color-text-dark);
 }
 
@@ -1266,15 +1266,15 @@
 
 .record-field-block {
     padding: 1rem;
-    background: rgba(127, 183, 176, 0.06);
-    border: 1px solid rgba(127, 183, 176, 0.2);
+    background: rgba(14, 165, 233, 0.06);
+    border: 1px solid rgba(14, 165, 233, 0.2);
     border-radius: var(--radius-input);
     margin-bottom: 1rem;
 }
 
 .record-detail-modal .record-field-block .record-field-value {
     background: rgba(255, 255, 255, 0.4);
-    border-color: rgba(127, 183, 176, 0.22);
+    border-color: rgba(14, 165, 233, 0.22);
 }
 
 .record-tags-wrap {
@@ -1286,8 +1286,8 @@
 .record-tag {
     display: inline-block;
     padding: 0.4rem 0.75rem;
-    background: rgba(216, 184, 146, 0.2);
-    border: 1px solid rgba(127, 183, 176, 0.3);
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(14, 165, 233, 0.3);
     border-radius: var(--radius-input);
     font-size: 0.9rem;
     color: var(--color-text-dark);
@@ -1295,8 +1295,8 @@
 }
 
 .record-detail-modal .record-tag {
-    background: rgba(216, 184, 146, 0.25);
-    border-color: rgba(127, 183, 176, 0.35);
+    background: rgba(56, 189, 248, 0.25);
+    border-color: rgba(14, 165, 233, 0.35);
     color: var(--color-text-dark);
 }
 
@@ -1542,7 +1542,7 @@
 /* Custom Recharts Tooltip - clay theme */
 .custom-recharts-tooltip {
     background: var(--color-card-surface) !important;
-    border: 1px solid rgba(127, 183, 176, 0.3) !important;
+    border: 1px solid rgba(14, 165, 233, 0.3) !important;
     border-radius: var(--radius-input) !important;
     box-shadow: var(--shadow-clay) !important;
     padding: 12px 14px !important;

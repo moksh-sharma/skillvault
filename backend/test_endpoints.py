@@ -4,10 +4,16 @@ Tests all endpoints for proper status codes and error handling
 """
 import requests
 import json
+import os
 from typing import Dict, List, Tuple
 from urllib.parse import urljoin
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = os.environ.get("BASE_URL", "http://localhost:8002").rstrip("/")
+
+
+def mark(ok: bool) -> str:
+    # Avoid UnicodeEncodeError on Windows cp1252 consoles
+    return "OK" if ok else "FAIL"
 
 # Test results storage
 results: Dict[str, Dict] = {}
@@ -83,17 +89,17 @@ def main():
     # 1. Health check (should always work)
     status, result = test_endpoint("GET", "/health", expected_status=200, description="Health check")
     results["GET /health"] = result
-    print(f"GET /health: {status} {'✓' if status == 200 else '✗'}")
+    print(f"GET /health: {status} {mark(status == 200)}")
     
     # 2. Root endpoint
     status, result = test_endpoint("GET", "/", expected_status=200, description="Root endpoint")
     results["GET /"] = result
-    print(f"GET /: {status} {'✓' if status == 200 else '✗'}")
+    print(f"GET /: {status} {mark(status == 200)}")
     
     # 3. Docs endpoint
     status, result = test_endpoint("GET", "/docs", expected_status=200, description="API documentation")
     results["GET /docs"] = result
-    print(f"GET /docs: {status} {'✓' if status == 200 else '✗'}")
+    print(f"GET /docs: {status} {mark(status == 200)}")
     
     # 4. Auth endpoints (without auth - should return 401 or 400)
     print("\nTesting Auth Endpoints (without authentication)...")
@@ -109,7 +115,7 @@ def main():
     for method, path, expected, desc in auth_endpoints:
         status, result = test_endpoint(method, path, expected_status=expected, description=desc)
         results[f"{method} {path}"] = result
-        match = "✓" if status == expected else "✗"
+        match = mark(status == expected)
         print(f"{method} {path}: {status} (expected {expected}) {match}")
     
     # 5. Resume endpoints (without auth - should return 401 or 200 for public endpoints)
@@ -127,7 +133,7 @@ def main():
     for method, path, expected, desc in resume_endpoints:
         status, result = test_endpoint(method, path, expected_status=expected, description=desc)
         results[f"{method} {path}"] = result
-        match = "✓" if status == expected else "✗"
+        match = mark(status == expected)
         print(f"{method} {path}: {status} (expected {expected}) {match}")
     
     # 6. Admin endpoints (should return 401 without auth)
@@ -143,7 +149,7 @@ def main():
     for method, path, expected, desc in admin_endpoints:
         status, result = test_endpoint(method, path, expected_status=expected, description=desc)
         results[f"{method} {path}"] = result
-        match = "✓" if status == expected else "✗"
+        match = mark(status == expected)
         print(f"{method} {path}: {status} (expected {expected}) {match}")
     
     # 7. JD Analysis endpoints
@@ -159,7 +165,7 @@ def main():
     for method, path, expected, desc in jd_endpoints:
         status, result = test_endpoint(method, path, expected_status=expected, description=desc)
         results[f"{method} {path}"] = result
-        match = "✓" if status == expected else "✗"
+        match = mark(status == expected)
         print(f"{method} {path}: {status} (expected {expected}) {match}")
     
     # 8. User Profile endpoints
@@ -174,7 +180,7 @@ def main():
     for method, path, expected, desc in profile_endpoints:
         status, result = test_endpoint(method, path, expected_status=expected, description=desc)
         results[f"{method} {path}"] = result
-        match = "✓" if status == expected else "✗"
+        match = mark(status == expected)
         print(f"{method} {path}: {status} (expected {expected}) {match}")
     
     # 9. Test 404 errors
@@ -189,7 +195,7 @@ def main():
     for method, path, expected, desc in not_found_endpoints:
         status, result = test_endpoint(method, path, expected_status=expected, description=desc)
         results[f"{method} {path}"] = result
-        match = "✓" if status == expected else "✗"
+        match = mark(status == expected)
         print(f"{method} {path}: {status} (expected {expected}) {match}")
     
     # Summary
@@ -202,8 +208,8 @@ def main():
     failed = total - passed
     
     print(f"Total endpoints tested: {total}")
-    print(f"Passed: {passed} ✓")
-    print(f"Failed: {failed} ✗")
+    print(f"Passed: {passed}")
+    print(f"Failed: {failed}")
     
     if failed > 0:
         print("\nFailed Endpoints:")

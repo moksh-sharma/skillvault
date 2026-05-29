@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { setPasswordWithToken } from '../config/api'
+import { WOMEN_OWNED_LOGO_SRC, CACHE_LOGO_SRC } from '../config/brandAssets'
 import './ForgotPassword.css'
 import './SetPassword.css'
 
@@ -72,8 +73,8 @@ const SetPassword = () => {
     return (
       <div className="forgot-password-container">
         <div className="page-logos">
-          <img src="/Untitled-1.png" alt="Women Owned" className="logo-left" />
-          <img src="/cache.png" alt="Cache" className="logo-right" />
+          <img src={WOMEN_OWNED_LOGO_SRC} alt="Women Owned" className="logo-left" />
+          <img src={CACHE_LOGO_SRC} alt="CACHE" className="logo-right" />
         </div>
         <div className="forgot-password-card" style={{ maxWidth: '420px' }}>
           <h1 className="forgot-password-title">Set Password</h1>
@@ -89,8 +90,8 @@ const SetPassword = () => {
   return (
     <div className="forgot-password-container">
       <div className="page-logos">
-        <img src="/Untitled-1.png" alt="Women Owned" className="logo-left" />
-        <img src="/cache.png" alt="Cache" className="logo-right" />
+        <img src={WOMEN_OWNED_LOGO_SRC} alt="Women Owned" className="logo-left" />
+        <img src={CACHE_LOGO_SRC} alt="CACHE" className="logo-right" />
       </div>
       <motion.div
         className="forgot-password-card change-password-card"

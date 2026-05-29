@@ -1,6 +1,6 @@
-# Techbank.Ai - Frontend Application
+# SkillVault - Frontend Application
 
-A modern, animated React frontend for the Techbank.Ai resume screening platform.
+A modern, animated React frontend for the SkillVault resume screening platform.
 
 ## Features
 
@@ -88,7 +88,7 @@ The application supports 4 employment types:
 
 ### Dashboard
 - Beautiful gradient background
-- Navbar with "Techbank.Ai" heading
+- Navbar with "SkillVault" heading
 - Profile button with user avatar
 - Admin toggle button
 - 4 employment type cards directly on dashboard:

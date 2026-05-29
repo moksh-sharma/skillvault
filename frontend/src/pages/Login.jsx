@@ -3,6 +3,8 @@ import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useApp } from '../context/AppContext'
 import { login, googleLogin } from '../config/api'
+import { APP_NAME, APP_TAGLINE, ADMIN_DASHBOARD_PATH } from '../config/brand'
+import { WOMEN_OWNED_LOGO_SRC, CACHE_LOGO_SRC } from '../config/brandAssets'
 import { GoogleLogin } from '@react-oauth/google'
 import './Login.css'
 
@@ -29,14 +31,14 @@ const Login = () => {
           const isAdmin = userProfile?.mode?.toLowerCase().includes('admin')
           if (isAdmin) {
             // Already an admin, just go to admin panel
-            navigate('/techbank', { replace: true })
+            navigate(ADMIN_DASHBOARD_PATH, { replace: true })
           } else {
             // Logged in as user but wants admin, clear session
             await logout()
           }
         } else if (userProfile?.mode === 'admin') {
           // Already logged in as admin, visiting regular login, send to admin
-          navigate('/techbank', { replace: true })
+          navigate(ADMIN_DASHBOARD_PATH, { replace: true })
         } else {
           // Already logged in as user, visiting regular login, send to dashboard
           navigate('/dashboard', { replace: true })
@@ -150,7 +152,7 @@ const Login = () => {
 
       if (isAdmin) {
         sessionStorage.setItem('adminEntranceShown', 'true')
-        navigate('/techbank', { replace: true })
+        navigate(ADMIN_DASHBOARD_PATH, { replace: true })
       } else {
         const from = location.state?.from?.pathname
         if (from) {
@@ -169,8 +171,8 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="page-logos">
-        <img src="/Untitled-1.png" alt="Women Owned" className="logo-left" />
-        <img src="/cache.png" alt="Cache" className="logo-right" />
+        <img src={WOMEN_OWNED_LOGO_SRC} alt="Women Owned" className="logo-left" />
+        <img src={CACHE_LOGO_SRC} alt="CACHE" className="logo-right" />
       </div>
       <div className="animated-background">
         <div className="gradient-orb orb-1"></div>
@@ -191,8 +193,8 @@ const Login = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <h1 className="brand-title">Techbank.Ai</h1>
-          <p className="brand-tagline">Resume Screening Platform</p>
+          <h1 className="brand-title">{APP_NAME}</h1>
+          <p className="brand-tagline">{APP_TAGLINE}</p>
         </motion.div>
 
         <motion.h2
@@ -336,7 +338,7 @@ const Login = () => {
 
                       if (isAdmin) {
                         sessionStorage.setItem('adminEntranceShown', 'true');
-                        navigate('/techbank', { replace: true });
+                        navigate(ADMIN_DASHBOARD_PATH, { replace: true });
                       } else {
                         const from = location.state?.from?.pathname;
                         if (from) {

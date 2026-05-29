@@ -10,7 +10,7 @@ const StartupSequence = ({ onComplete }) => {
         "Loading Components...",
         "Preparing System...",
         "Almost Ready...",
-        "Welcome to TechBankAI"
+        "Welcome to SkillVault"
     ];
 
     useEffect(() => {

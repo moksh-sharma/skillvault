@@ -1,5 +1,5 @@
 {
-  "name": "techbank-ai-frontend",
+  "name": "skillvault-frontend",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -23,6 +23,8 @@
   },
   "dependencies": {
     "@react-oauth/google": "^0.13.4",
+    "@studio-freight/lenis": "^1.0.42",
+    "@studio-freight/react-lenis": "^0.0.47",
     "apexcharts": "^5.3.6",
     "chart.js": "^4.5.1",
     "framer-motion": "^10.16.16",

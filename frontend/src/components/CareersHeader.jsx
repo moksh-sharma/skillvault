@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { CACHE_LOGO_SRC } from '../config/brandAssets'
 import './CareersHeader.css'
 
 const CareersHeader = () => {
@@ -7,7 +8,7 @@ const CareersHeader = () => {
     <header className="careers-header">
       <div className="careers-header-content">
         <div className="careers-logo" onClick={() => navigate('/')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && navigate('/')}>
-          <img src="/cache.png" alt="Cache Digitech" />
+          <img src={CACHE_LOGO_SRC} alt="CACHE" />
           <span className="careers-logo-text">Cache Digitech</span>
         </div>
         <nav className="careers-header-nav">

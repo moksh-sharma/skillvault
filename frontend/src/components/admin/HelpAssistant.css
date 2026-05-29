@@ -6,8 +6,8 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  border: 2px solid rgba(127, 183, 176, 0.5);
-  background: linear-gradient(135deg, rgba(127, 183, 176, 0.25) 0%, rgba(127, 183, 176, 0.15) 100%);
+  border: 2px solid rgba(14, 165, 233, 0.5);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.25) 0%, rgba(14, 165, 233, 0.15) 100%);
   color: #0f766e;
   font-size: 1.4rem;
   font-weight: 700;
@@ -40,7 +40,7 @@
 }
 
 .help-assistant-fab:hover {
-  background: linear-gradient(135deg, rgba(127, 183, 176, 0.4) 0%, rgba(127, 183, 176, 0.25) 100%);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.4) 0%, rgba(14, 165, 233, 0.25) 100%);
 }
 
 .help-assistant-fab--flying:hover {
@@ -96,7 +96,7 @@
   flex-direction: column;
   background: var(--color-card-surface, #fff);
   border-radius: var(--radius-card, 12px);
-  border: 1px solid rgba(127, 183, 176, 0.25);
+  border: 1px solid rgba(14, 165, 233, 0.25);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
   z-index: 9999;
   overflow: hidden;
@@ -107,8 +107,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, rgba(127, 183, 176, 0.2) 0%, rgba(127, 183, 176, 0.1) 100%);
-  border-bottom: 1px solid rgba(127, 183, 176, 0.2);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(14, 165, 233, 0.1) 100%);
+  border-bottom: 1px solid rgba(14, 165, 233, 0.2);
 }
 
 .help-assistant-title {
@@ -189,8 +189,8 @@
   width: 100%;
   padding: 0.6rem 0.75rem;
   margin-bottom: 0.35rem;
-  background: rgba(127, 183, 176, 0.08);
-  border: 1px solid rgba(127, 183, 176, 0.2);
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(14, 165, 233, 0.2);
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.85rem;
@@ -199,8 +199,8 @@
 }
 
 .help-assistant-history-item:hover {
-  background: rgba(127, 183, 176, 0.15);
-  border-color: rgba(127, 183, 176, 0.35);
+  background: rgba(14, 165, 233, 0.15);
+  border-color: rgba(14, 165, 233, 0.35);
 }
 
 .help-assistant-history-item-title {
@@ -245,14 +245,14 @@
 }
 
 .help-assistant-bubble-bot .help-assistant-bubble-inner {
-  background: rgba(127, 183, 176, 0.12);
-  border: 1px solid rgba(127, 183, 176, 0.2);
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.2);
   color: var(--color-text-dark, #1a1a1a);
 }
 
 .help-assistant-bubble-user .help-assistant-bubble-inner {
   background: rgba(15, 118, 110, 0.15);
-  border: 1px solid rgba(127, 183, 176, 0.35);
+  border: 1px solid rgba(14, 165, 233, 0.35);
   color: #0f766e;
 }
 
@@ -270,14 +270,14 @@
   display: flex;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border-top: 1px solid rgba(127, 183, 176, 0.2);
-  background: rgba(127, 183, 176, 0.06);
+  border-top: 1px solid rgba(14, 165, 233, 0.2);
+  background: rgba(14, 165, 233, 0.06);
 }
 
 .help-assistant-input {
   flex: 1;
   padding: 0.5rem 0.75rem;
-  border: 1px solid rgba(127, 183, 176, 0.35);
+  border: 1px solid rgba(14, 165, 233, 0.35);
   border-radius: var(--radius-input, 8px);
   font-size: 0.9rem;
   outline: none;

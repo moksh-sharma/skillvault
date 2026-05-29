@@ -24,7 +24,7 @@
   background: var(--color-card-surface);
   border-radius: var(--radius-card);
   padding: 28px 32px;
-  border: 1px solid rgba(127, 183, 176, 0.25);
+  border: 1px solid rgba(14, 165, 233, 0.25);
   box-shadow: var(--shadow-soft);
   margin-bottom: 3rem;
 }
@@ -34,10 +34,10 @@
   gap: 1rem;
   margin-bottom: 2rem;
   padding: 6px;
-  background: rgba(127, 183, 176, 0.08);
+  background: rgba(14, 165, 233, 0.08);
   border-radius: var(--radius-input);
   width: fit-content;
-  border: 1px solid rgba(127, 183, 176, 0.2);
+  border: 1px solid rgba(14, 165, 233, 0.2);
 }
 
 .jd-tab {
@@ -56,13 +56,13 @@
 }
 
 .jd-tab.active {
-  background: rgba(127, 183, 176, 0.2);
+  background: rgba(14, 165, 233, 0.2);
   color: var(--color-text-dark);
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
 
 .jd-tab:hover:not(.active) {
-  background: rgba(127, 183, 176, 0.12);
+  background: rgba(14, 165, 233, 0.12);
   color: var(--color-text-dark);
 }
 
@@ -150,22 +150,22 @@
 .find-candidates-btn {
   width: 100%;
   max-width: 320px;
-  background: rgba(127, 183, 176, 0.25);
+  background: rgba(14, 165, 233, 0.25);
   color: #1a1a1a;
-  border: 1px solid rgba(127, 183, 176, 0.45);
+  border: 1px solid rgba(14, 165, 233, 0.45);
   padding: 1rem;
   border-radius: 16px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 12px rgba(127, 183, 176, 0.2);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
 }
 
 .find-candidates-btn:hover:not(:disabled) {
-  background: rgba(127, 183, 176, 0.4);
-  border-color: rgba(127, 183, 176, 0.55);
-  box-shadow: 0 8px 20px rgba(127, 183, 176, 0.3);
+  background: rgba(14, 165, 233, 0.4);
+  border-color: rgba(14, 165, 233, 0.55);
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
 }
 
 .find-candidates-btn:disabled {

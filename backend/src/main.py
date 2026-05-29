@@ -31,7 +31,7 @@ logger = get_logger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    logger.info("Starting TechBank.ai Backend...")
+    logger.info("Starting SkillVault Backend...")
     
     # Initialize PostgreSQL tables (includes users, resumes, jd_analysis, etc.)
     await init_postgres_db()
@@ -42,12 +42,12 @@ async def lifespan(app: FastAPI):
     yield
     
     # Shutdown
-    logger.info("Shutting down TechBank.ai Backend...")
+    logger.info("Shutting down SkillVault Backend...")
     logger.info("Shutdown complete")
 
 # Create FastAPI app
 app = FastAPI(
-    title="TechBank.ai API",
+    title="SkillVault API",
     description="AI-Powered Resume Management and JD Analysis System",
     version="1.0.0",
     lifespan=lifespan
@@ -209,7 +209,7 @@ async def health_check():
     """Health check endpoint."""
     return {
         "status": "healthy",
-        "service": "TechBank.ai Backend",
+        "service": "SkillVault Backend",
         "version": "1.0.0"
     }
 
@@ -218,7 +218,7 @@ async def health_check():
 async def root():
     """Root endpoint with API information."""
     return {
-        "message": "Welcome to TechBank.ai API",
+        "message": "Welcome to SkillVault API",
         "version": "1.0.0",
         "docs": "/docs",
         "health": "/health",

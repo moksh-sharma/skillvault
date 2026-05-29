@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AppProvider } from './context/AppContext'
+import SmoothScroll from './components/SmoothScroll'
 import ProtectedRoute from './components/ProtectedRoute'
 import ErrorBoundary from './components/ErrorBoundary'
 import LandingPage from './pages/LandingPage'
@@ -11,12 +12,16 @@ import FreelancerPortal from './pages/FreelancerPortal'
 import EmployeePortal from './pages/EmployeePortal'
 import Careers from './pages/Careers'
 import Application from './pages/Application'
+import { ADMIN_DASHBOARD_PATH } from './config/brand'
 
-/** Old bookmarks: /admin → /techbank (SPA has no nested /admin paths, but keep query string). */
-function LegacyAdminRedirect() {
+/** Old bookmarks: /admin or /techbank → /skillvault (keep query string). */
+function LegacyDashboardRedirect({ fromPrefix }) {
   const { pathname, search } = useLocation()
-  const tail = pathname.slice('/admin'.length)
-  const to = '/techbank' + (tail.startsWith('/') ? tail : tail ? `/${tail}` : '') + search
+  const tail = pathname.slice(fromPrefix.length)
+  const to =
+    ADMIN_DASHBOARD_PATH +
+    (tail.startsWith('/') ? tail : tail ? `/${tail}` : '') +
+    search
   return <Navigate to={to} replace />
 }
 
@@ -77,9 +82,10 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route path="/admin/*" element={<LegacyAdminRedirect />} />
+      <Route path="/admin/*" element={<LegacyDashboardRedirect fromPrefix="/admin" />} />
+      <Route path="/techbank/*" element={<LegacyDashboardRedirect fromPrefix="/techbank" />} />
       <Route
-        path="/techbank/*"
+        path={`${ADMIN_DASHBOARD_PATH}/*`}
         element={
           <ProtectedRoute adminOnly={true}>
             <Admin />
@@ -97,7 +103,9 @@ function App() {
   try {
     return (
       <AppProvider>
-        <AppRoutes />
+        <SmoothScroll>
+          <AppRoutes />
+        </SmoothScroll>
       </AppProvider>
     )
   } catch (error) {

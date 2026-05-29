@@ -50,7 +50,7 @@
   border-radius: var(--radius-card);
   padding: 28px 32px;
   box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(127, 183, 176, 0.2);
+  border: 1px solid rgba(14, 165, 233, 0.2);
   width: 100%;
   max-width: 500px;
   position: relative;
@@ -116,7 +116,7 @@
 
 .form-group input {
   padding: 0.875rem 1rem;
-  border: 1px solid rgba(127, 183, 176, 0.3);
+  border: 1px solid rgba(14, 165, 233, 0.3);
   border-radius: var(--radius-input);
   font-size: 1rem;
   color: var(--color-text-dark);
@@ -134,7 +134,7 @@
 .form-group input:focus {
   outline: none;
   border-color: var(--color-accent-teal);
-  box-shadow: 0 0 0 3px rgba(127, 183, 176, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.6);
 }
 
 .form-group input.error {
@@ -252,7 +252,7 @@
 
 .password-toggle:hover {
   color: var(--color-accent-teal);
-  background: rgba(127, 183, 176, 0.12);
+  background: rgba(14, 165, 233, 0.12);
 }
 
 .login-button:disabled {

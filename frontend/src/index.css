@@ -1,50 +1,82 @@
+/* Lenis Smooth Scroll */
+html.lenis, html.lenis body {
+  height: auto;
+  width: 100%;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 :root {
-  /* Soft 3D / Claymorphism theme */
-  --color-bg-base: #EDE6DB;
-  --color-card-surface: #F4EFE8;
-  --color-accent-teal: #7FB7B0;
-  --color-accent-sand: #D8B892;
-  --color-text-dark: #2F2F2F;
-  --color-text-muted: #7A7A7A;
+  /* Modern Premium SaaS Theme */
+  --color-bg-base: #F8FAFC;
+  --color-card-surface: #FFFFFF;
+  --color-accent-teal: #0EA5E9; /* Modern Blue */
+  --color-accent-sand: #38BDF8; /* Lighter Blue */
+  --color-text-dark: #0F172A;
+  --color-text-muted: #64748B;
+  
   /* Legacy aliases for existing usage */
-  --color-primary: #2F2F2F;
-  --color-secondary: #7FB7B0;
-  --color-accent: #7FB7B0;
-  --color-highlight: #D8B892;
-  --color-soft: #F4EFE8;
-  --glass-bg: #F4EFE8;
-  --glass-bg-hover: rgba(244, 239, 232, 0.95);
-  --glass-border: rgba(127, 183, 176, 0.25);
-  --glass-blur: blur(20px);
-  --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6);
-  --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6);
-  --shadow-floating: 0 30px 60px rgba(0, 0, 0, 0.12);
-  --radius-card: 24px;
-  --radius-button: 18px;
-  --radius-input: 16px;
+  --color-primary: #0F172A;
+  --color-secondary: #0EA5E9;
+  --color-accent: #0EA5E9;
+  --color-highlight: #38BDF8;
+  --color-soft: #F1F5F9;
+  
+  /* Modern Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-hover: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-blur: blur(16px);
+  
+  /* Refined Shadows */
+  --glass-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+  --shadow-floating: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Geometry */
+  --radius-card: 16px;
+  --radius-button: 8px;
+  --radius-input: 8px;
   --space-section: 64px;
   --space-card: 24px;
   --gap-cards: 24px;
-  --gradient-primary: linear-gradient(135deg, #7FB7B0 0%, #6ba39d 100%);
-  --gradient-secondary: linear-gradient(135deg, #D8B892 0%, #c9a87a 100%);
-  --gradient-soft: linear-gradient(135deg, #F4EFE8 0%, #EDE6DB 100%);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%);
+  --gradient-secondary: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 100%);
+  --gradient-soft: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+  
   /* Claymorphism chart theme */
   --chart-grid: rgba(0, 0, 0, 0.05);
-  --chart-axis: #9CA3AF;
-  --chart-teal: #7FB7B0;
-  --chart-purple: #A78BFA;
+  --chart-axis: #94A3B8;
+  --chart-teal: #0EA5E9;
+  --chart-purple: #8B5CF6;
   --chart-pink: #EC4899;
-  --chart-text: #1F2937;
-  --chart-muted: #6B7280;
-  --radius-card-clay: 28px;
-  --shadow-clay: 0 20px 40px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  --chart-text: #0F172A;
+  --chart-muted: #64748B;
+  --radius-card-clay: 16px;
+  --shadow-clay: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
 }
 
 .clay-card {
   background: var(--color-card-surface);
   border-radius: var(--radius-card-clay);
   box-shadow: var(--shadow-clay);
-  border: 1px solid rgba(127, 183, 176, 0.2);
+  border: 1px solid rgba(14, 165, 233, 0.2);
 }
 
 * {
@@ -98,22 +130,22 @@ body {
   overflow-x: hidden;
 }
 
-/* Animated Background Orbs - pastel teal & sand */
+/* Animated Background Orbs - modern blue */
 body::before,
 body::after {
   content: '';
   position: fixed;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.25;
-  z-index: 0;
+  filter: blur(100px);
+  opacity: 0.15;
+  z-index: -1;
   pointer-events: none;
 }
 
 body::before {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(127, 183, 176, 0.35) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.4) 0%, transparent 70%);
   top: -200px;
   right: -200px;
   animation: float 20s ease-in-out infinite;
@@ -122,7 +154,7 @@ body::before {
 body::after {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(216, 184, 146, 0.35) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, transparent 70%);
   bottom: -150px;
   left: -150px;
   animation: float 25s ease-in-out infinite reverse;
@@ -161,7 +193,7 @@ code {
   --color-soft: #252530;
   --glass-bg: #252530;
   --glass-bg-hover: rgba(37, 37, 48, 0.98);
-  --glass-border: rgba(127, 183, 176, 0.2);
+  --glass-border: rgba(14, 165, 233, 0.2);
   --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.35);
   --shadow-floating: 0 30px 60px rgba(0, 0, 0, 0.4);
   --gradient-soft: linear-gradient(135deg, #252530 0%, #1a1a1f 100%);

@@ -22,6 +22,7 @@ from src.config.settings import settings
 import asyncio
 import hashlib
 import json
+import re
 
 logger = get_logger(__name__)
 router = APIRouter(prefix="/api/jd", tags=["JD Analysis"])
@@ -38,6 +39,69 @@ def fix_file_url(url: str) -> str:
         # Use simple localhost construction as fallback
         return f"http://localhost:{settings.port}{url}"
     return url
+
+
+def _heuristic_jd_structure_v2(jd_text: str, dims: list) -> dict:
+    """
+    Fallback JD "structure" extractor when Ollama/LLM is unavailable.
+
+    Produces a minimal schema compatible with v2 pipeline:
+    - selected_dimensions: chosen by seed skill overlap with JD text
+    - required/preferred skills: drawn from dimension seed skills present in JD text
+    """
+    text = " ".join((jd_text or "").lower().split())
+
+    # crude min experience extraction (e.g. "3 years", "5+ years")
+    min_exp = 0
+    m = re.search(r"(\d{1,2})\s*\+?\s*(?:years|yrs)\b", text)
+    if m:
+        try:
+            min_exp = int(m.group(1))
+        except Exception:
+            min_exp = 0
+
+    selected = []
+    for d in dims:
+        seed = list(d.seed_skills) if getattr(d, "seed_skills", None) else []
+        hit = []
+        for s in seed:
+            if not s:
+                continue
+            key = str(s).strip().lower()
+            if not key:
+                continue
+            # match whole-ish words
+            if re.search(rf"(^|[^a-z0-9]){re.escape(key)}([^a-z0-9]|$)", text):
+                hit.append(str(s).strip())
+
+        if hit:
+            # Use hit skills as required skills for that dimension
+            selected.append(
+                {
+                    "dimension_id": d.id,
+                    "required_skills": hit[:15],
+                    "preferred_skills": [],
+                    "confidence": "medium",
+                }
+            )
+
+    # If nothing matched, fall back to first few dims so scoring still returns something
+    if not selected:
+        selected = [
+            {
+                "dimension_id": d.id,
+                "required_skills": [],
+                "preferred_skills": [],
+                "confidence": "none",
+            }
+            for d in (dims[:4] if dims else [])
+        ]
+
+    return {
+        "jd_role": "Not mentioned",
+        "min_experience_years": min_exp,
+        "selected_dimensions": selected,
+    }
 
 @router.post("/analyze")
 async def analyze_jd(
@@ -319,7 +383,7 @@ async def analyze_jd(
              raise e
         
         # Phase 3: AI-enhanced scoring with DETACHED data (no DB session access)
-        semaphore = asyncio.Semaphore(3)  # Reduced from 5 to 3 to avoid rate limits
+        semaphore = asyncio.Semaphore(max(1, settings.ollama_max_parallel))
         async def score_resume(detached_data):
             try:
                 resume_id = detached_data['resume_id']
@@ -598,7 +662,18 @@ async def analyze_jd_v2(
         ]
         dim_labels = {d.id: d.label for d in dims}
 
-        jd_struct = await openai_service.extract_jd_structure_v2(jd_text, dim_lib_payload)
+        # LLM step (Ollama) – fall back to heuristic extraction if unavailable
+        try:
+            jd_struct = await openai_service.extract_jd_structure_v2(jd_text, dim_lib_payload)
+        except Exception as e:
+            logger.warning(
+                "[v2] Ollama unavailable for JD extraction; using heuristic fallback. "
+                "%s: %s",
+                type(e).__name__,
+                e or "(no message)",
+            )
+            jd_struct = _heuristic_jd_structure_v2(jd_text, dims)
+
         jd_role = jd_struct.get("jd_role", "Not mentioned")
         min_experience_years = jd_struct.get("min_experience_years", 0) or 0
         selected_dimensions = jd_struct.get("selected_dimensions", []) or []
@@ -762,7 +837,7 @@ async def analyze_jd_v2(
             if key and key not in jd_norm_to_original:
                 jd_norm_to_original[key] = s
 
-        semaphore = asyncio.Semaphore(3)
+        semaphore = asyncio.Semaphore(max(1, settings.ollama_max_parallel))
 
         async def score_one(resume: Resume, resume_data: dict):
             detached = format_resume_response(resume)
@@ -823,11 +898,48 @@ async def analyze_jd_v2(
                 f"(no cache match for structure_hash={jd_structure_hash[:8]}...)"
             )
 
-            async with semaphore:
-                evidence = await openai_service.extract_resume_evidence_v2(detached, jd_struct)
+            # LLM step (Ollama) – fall back to heuristic evidence if unavailable
+            try:
+                async with semaphore:
+                    evidence = await openai_service.extract_resume_evidence_v2(detached, jd_struct)
+            except Exception as e:
+                logger.warning(
+                    "[v2] Ollama unavailable for resume evidence; using heuristic evidence. "
+                    "%s: %s",
+                    type(e).__name__,
+                    e or "(no message)",
+                )
+                evidence = {"evidence_by_dimension": {}}
 
             evidence_by_dim = (evidence or {}).get("evidence_by_dimension", {}) or {}
-            confidence_by_dim = {dim_id: (data or {}).get("confidence", "none") for dim_id, data in evidence_by_dim.items()}
+
+            # If no evidence returned (or fallback), approximate confidence using skill overlap per dimension
+            confidence_by_dim = {}
+            if evidence_by_dim:
+                confidence_by_dim = {
+                    dim_id: (data or {}).get("confidence", "none") for dim_id, data in evidence_by_dim.items()
+                }
+            else:
+                # selected_dimensions contains per-dimension required skills from JD extraction (LLM or heuristic).
+                # Use overlap against canonical resume skills to estimate confidence.
+                resume_skill_set = set(normalize_skills(detached.get("skills") or []))
+                for d in selected_dimensions:
+                    if not isinstance(d, dict):
+                        continue
+                    dim_id = d.get("dimension_id")
+                    if not dim_id:
+                        continue
+                    req = d.get("required_skills") or []
+                    req_norm = set(normalize_skills(req))
+                    overlap = len(req_norm.intersection(resume_skill_set))
+                    if overlap >= 5:
+                        confidence_by_dim[dim_id] = "high"
+                    elif overlap >= 2:
+                        confidence_by_dim[dim_id] = "medium"
+                    elif overlap >= 1:
+                        confidence_by_dim[dim_id] = "low"
+                    else:
+                        confidence_by_dim[dim_id] = "none"
             
             logger.debug(
                 f"[v2] GPT evidence for resume {resume.id}: {confidence_by_dim}"

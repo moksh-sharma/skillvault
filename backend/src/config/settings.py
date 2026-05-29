@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     database_url: Optional[str] = None
     
     # Server Configuration
-    host: str = "0.0.0.0"
+    host: str = "127.0.0.1"
     port: int = 8000
     
     # JWT Configuration
@@ -26,9 +26,13 @@ class Settings(BaseSettings):
     jwt_expiration_hours: int = 24
     
     # Ollama Configuration
-    ollama_base_url: str = "http://172.16.200.30:11434"
-    ollama_model: str = "llama3.1:latest"
-    ollama_max_tokens: int = 4096
+    ollama_base_url: str = "http://localhost:11434"
+    ollama_model: str = "llama3.2:3b"
+    ollama_max_tokens: int = 2048
+    ollama_read_timeout: float = 90.0
+    ollama_connect_timeout: float = 10.0
+    ollama_max_retries: int = 2
+    ollama_max_parallel: int = 1
     
     # Google Drive Configuration
     google_drive_credentials_path: Optional[str] = None
@@ -50,7 +54,7 @@ class Settings(BaseSettings):
     max_file_size_mb: int = 10
     
     # CORS Configuration
-    cors_origins: str = "*"  # Comma-separated origins or "*" for all
+    cors_origins: str = "http://localhost:3005,http://127.0.0.1:3005,http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000"  # Comma-separated origins
 
     # Frontend base URL (for invite/set-password links in emails). Main app runs on port 3005 by default.
     frontend_base_url: str = "http://localhost:3005"

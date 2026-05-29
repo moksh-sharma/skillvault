@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { sendPasswordResetCode, verifyPasswordResetCode, resetPassword } from '../config/api'
+import { APP_NAME, APP_TAGLINE } from '../config/brand'
+import { WOMEN_OWNED_LOGO_SRC, CACHE_LOGO_SRC } from '../config/brandAssets'
 import './ForgotPassword.css'
 
 const ForgotPassword = () => {
@@ -109,7 +111,7 @@ const ForgotPassword = () => {
 
   const handleResendCode = () => {
     if (countdown > 0) return
-    handleSendCode({ preventDefault: () => {} })
+    handleSendCode({ preventDefault: () => { } })
   }
 
   const handleVerifyCode = async (e) => {
@@ -167,7 +169,7 @@ const ForgotPassword = () => {
 
     try {
       await resetPassword(email, verificationCode, newPassword)
-      navigate('/login', { 
+      navigate('/login', {
         state: { message: 'Password reset successfully. Please login with your new password.' }
       })
     } catch (error) {
@@ -181,8 +183,8 @@ const ForgotPassword = () => {
   return (
     <div className="forgot-password-container">
       <div className="page-logos">
-        <img src="/Untitled-1.png" alt="Women Owned" className="logo-left" />
-        <img src="/cache.png" alt="Cache" className="logo-right" />
+        <img src={WOMEN_OWNED_LOGO_SRC} alt="Women Owned" className="logo-left" />
+        <img src={CACHE_LOGO_SRC} alt="CACHE" className="logo-right" />
       </div>
       <div className="animated-background">
         <div className="gradient-orb orb-1"></div>
@@ -203,8 +205,8 @@ const ForgotPassword = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <h1 className="brand-title">Techbank.Ai</h1>
-          <p className="brand-tagline">Resume Screening Platform</p>
+          <h1 className="brand-title">{APP_NAME}</h1>
+          <p className="brand-tagline">{APP_TAGLINE}</p>
         </motion.div>
 
         <motion.h2
@@ -217,7 +219,7 @@ const ForgotPassword = () => {
           {step === 2 && 'Verify Code'}
           {step === 3 && 'Reset Password'}
         </motion.h2>
-        
+
         <motion.p
           className="forgot-password-subtitle"
           initial={{ opacity: 0 }}
@@ -257,7 +259,7 @@ const ForgotPassword = () => {
                 transition={{ delay: 0.4 }}
               >
                 <label htmlFor="email">Email Address</label>
-                  <input
+                <input
                   type="email"
                   id="email"
                   name="email"
@@ -266,7 +268,7 @@ const ForgotPassword = () => {
                   placeholder="Enter your email address"
                   className={errors.email ? 'error' : ''}
                   autoComplete="off"
-                  />
+                />
                 {errors.email && (
                   <span className="error-message">{errors.email}</span>
                 )}
