@@ -33,7 +33,7 @@ Write-Host ''
 # Write network links to a file so you can copy/share with other PCs
 $linksFile = Join-Path $root "PORTAL_NETWORK_LINKS.txt"
 @"
-# TechBank.ai – Portal links for other PCs on the same network
+# TechBank.ai - Portal links for other PCs on the same network
 # Replace YOUR_PC_IP with your machine's IP (see below) or use the detected IP already filled in.
 # Run: .\start-portals.ps1 (network mode) so these ports are listening.
 

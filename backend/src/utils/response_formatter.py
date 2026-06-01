@@ -52,7 +52,9 @@ def format_resume_response(resume: Resume) -> Dict[str, Any]:
         email = resume.source_metadata['form_data'].get('email')
         
     if not email:
-        email = parsed.get('resume_contact_info')
+        from src.services.resume_parser import normalize_contact_info
+        raw_contact = parsed.get('resume_contact_info')
+        email = normalize_contact_info(raw_contact)
         if email == "Not mentioned":
             email = None
     

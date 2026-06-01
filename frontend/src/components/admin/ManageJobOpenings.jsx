@@ -10,6 +10,7 @@ import {
   API_BASE_URL,
   API_ENDPOINTS
 } from '../../config/api'
+import { emitAdminActivity } from '../../utils/adminActivity'
 import './ManageJobOpenings.css'
 import './AdminDashboard.css'
 
@@ -35,7 +36,7 @@ const cleanCertText = (text) => {
   if (typeof text !== 'string') return ''
   return text.replace(/^[●☐☑✓✔✅❌□■▪▫•◦‣⁃∙⦿⦾]+\s*/g, '').replace(/^[\-\*\d\.]+\s*/g, '').trim()
 }
-const EMPTY_PLACEHOLDERS = ['', 'n/a', '—', 'no work experience records found', 'no education records found', 'no skills detected', 'no certifications found']
+const EMPTY_PLACEHOLDERS = ['', 'n/a', '-', 'no work experience records found', 'no education records found', 'no skills detected', 'no certifications found']
 const isFilled = (value) => {
   if (value === null || value === undefined) return false
   if (typeof value === 'number' && !Number.isNaN(value)) return true
@@ -140,7 +141,7 @@ const ManageJobOpenings = () => {
     e.preventDefault()
     
     // When creating a new job: require JD (either upload a file or write description)
-    // When editing: no JD required – can e.g. just change status to inactive
+    // When editing: no JD required - can e.g. just change status to inactive
     if (!editingJob) {
       if (jdMethod === 'upload' && !jdFile) {
         setError('Please upload a JD file or switch to "Write JD" method')
@@ -163,8 +164,10 @@ const ManageJobOpenings = () => {
       
       if (editingJob) {
         await updateJobOpening(editingJob.job_id, jobData, fileToUpload)
+        emitAdminActivity({ type: 'job_updated', jobId: editingJob.job_id })
       } else {
         await createJobOpening(jobData, fileToUpload)
+        emitAdminActivity({ type: 'job_created' })
       }
       await fetchJobOpenings()
       setShowForm(false)
@@ -652,8 +655,8 @@ const ManageJobOpenings = () => {
                               </div>
                             </div>
                           </td>
-                          <td><span className="role-text" title={resume.applied_for_job_title || applicantsModalJob?.title}>{resume.applied_for_job_title || applicantsModalJob?.title || '—'}</span></td>
-                          <td><span className="notice-text">{resume.applied_at ? new Date(resume.applied_at).toLocaleDateString(undefined, { dateStyle: 'short' }) : '—'}</span></td>
+                          <td><span className="role-text" title={resume.applied_for_job_title || applicantsModalJob?.title}>{resume.applied_for_job_title || applicantsModalJob?.title || '-'}</span></td>
+                          <td><span className="notice-text">{resume.applied_at ? new Date(resume.applied_at).toLocaleDateString(undefined, { dateStyle: 'short' }) : '-'}</span></td>
                           <td>
                             <span className={`type-badge-new ${resume.user_type || resume.source_type || 'default'}`}>
                               {formatUserType(resume.user_type || resume.source_type)}
@@ -700,7 +703,7 @@ const ManageJobOpenings = () => {
                               {(resume.portfolio || resume.meta_data?.form_data?.portfolio) && (
                                 <a href={(resume.portfolio || resume.meta_data?.form_data?.portfolio || '').trim().startsWith('http') ? (resume.portfolio || resume.meta_data?.form_data?.portfolio) : `https://${(resume.portfolio || resume.meta_data?.form_data?.portfolio || '').trim()}`} target="_blank" rel="noreferrer" className="link-icon-btn">Portfolio</a>
                               )}
-                              {!(resume.linked_in || resume.meta_data?.form_data?.linkedIn || resume.portfolio || resume.meta_data?.form_data?.portfolio) && <span className="na-text">—</span>}
+                              {!(resume.linked_in || resume.meta_data?.form_data?.linkedIn || resume.portfolio || resume.meta_data?.form_data?.portfolio) && <span className="na-text">-</span>}
                             </div>
                           </td>
                         </tr>
@@ -715,7 +718,7 @@ const ManageJobOpenings = () => {
         document.body
       )}
 
-      {/* Applicant detail modal – same design as Records table pop-out + resume download */}
+      {/* Applicant detail modal - same design as Records table pop-out + resume download */}
       {selectedApplicant && applicantsModalJob && (() => {
         const candidate = selectedApplicant
         const parsed = candidate.parsed_data || {}
@@ -770,12 +773,12 @@ const ManageJobOpenings = () => {
                     <div className="record-fields-list">
                       <div className="record-field">
                         <span className="record-field-label">Applied for</span>
-                        <div className="record-field-value record-field-value-filled">{candidate.applied_for_job_title || applicantsModalJob?.title || '—'}</div>
+                        <div className="record-field-value record-field-value-filled">{candidate.applied_for_job_title || applicantsModalJob?.title || '-'}</div>
                       </div>
                       <div className="record-field">
                         <span className="record-field-label">Applied at</span>
                         <div className="record-field-value record-field-value-filled">
-                          {candidate.applied_at ? new Date(candidate.applied_at).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : '—'}
+                          {candidate.applied_at ? new Date(candidate.applied_at).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : '-'}
                         </div>
                       </div>
                       <div className="record-field">
@@ -821,7 +824,7 @@ const ManageJobOpenings = () => {
                       <div className="record-field">
                         <span className="record-field-label">Relocation Status &amp; Preference</span>
                         <div className="record-field-value record-field-value-filled">
-                          {candidate.ready_to_relocate ? `Ready to Relocate${candidate.preferred_location ? ` — Preferred: ${candidate.preferred_location}` : ''}` : 'Not open to relocation'}
+                          {candidate.ready_to_relocate ? `Ready to Relocate${candidate.preferred_location ? ` - Preferred: ${candidate.preferred_location}` : ''}` : 'Not open to relocation'}
                         </div>
                       </div>
                     </div>
@@ -860,20 +863,20 @@ const ManageJobOpenings = () => {
                           <div key={idx} className="experience-item record-field-block">
                             <div className="record-field">
                               <span className="record-field-label">Role</span>
-                              <div className={`record-field-value${isFilled(exp.role) ? ' record-field-value-filled' : ''}`}>{exp.role || '—'}</div>
+                              <div className={`record-field-value${isFilled(exp.role) ? ' record-field-value-filled' : ''}`}>{exp.role || '-'}</div>
                             </div>
                             <div className="record-field">
                               <span className="record-field-label">Company</span>
-                              <div className={`record-field-value${isFilled(exp.company) ? ' record-field-value-filled' : ''}`}>{exp.company || '—'}</div>
+                              <div className={`record-field-value${isFilled(exp.company) ? ' record-field-value-filled' : ''}`}>{exp.company || '-'}</div>
                             </div>
                             <div className="record-field">
                               <span className="record-field-label">Location</span>
-                              <div className={`record-field-value${isFilled(exp.location) ? ' record-field-value-filled' : ''}`}>{exp.location || '—'}</div>
+                              <div className={`record-field-value${isFilled(exp.location) ? ' record-field-value-filled' : ''}`}>{exp.location || '-'}</div>
                             </div>
                             <div className="record-field">
                               <span className="record-field-label">Period</span>
                               <div className={`record-field-value${(exp.start_date || exp.end_date) ? ' record-field-value-filled' : ''}`}>
-                                {exp.start_date || ''} {exp.start_date && exp.end_date ? '–' : ''} {exp.end_date || ''}{exp.is_current ? ' (Current)' : ''}
+                                {exp.start_date || ''} {exp.start_date && exp.end_date ? '-' : ''} {exp.end_date || ''}{exp.is_current ? ' (Current)' : ''}
                               </div>
                             </div>
                             {exp.description && (
@@ -901,20 +904,20 @@ const ManageJobOpenings = () => {
                           <div key={idx} className="education-item record-field-block">
                             <div className="record-field">
                               <span className="record-field-label">Degree</span>
-                              <div className={`record-field-value${isFilled(edu.degree) ? ' record-field-value-filled' : ''}`}>{edu.degree || '—'}</div>
+                              <div className={`record-field-value${isFilled(edu.degree) ? ' record-field-value-filled' : ''}`}>{edu.degree || '-'}</div>
                             </div>
                             <div className="record-field">
                               <span className="record-field-label">Institution</span>
-                              <div className={`record-field-value${isFilled(edu.institution) ? ' record-field-value-filled' : ''}`}>{edu.institution || '—'}</div>
+                              <div className={`record-field-value${isFilled(edu.institution) ? ' record-field-value-filled' : ''}`}>{edu.institution || '-'}</div>
                             </div>
                             <div className="record-field">
                               <span className="record-field-label">Field of study</span>
-                              <div className={`record-field-value${isFilled(edu.field_of_study) ? ' record-field-value-filled' : ''}`}>{edu.field_of_study || '—'}</div>
+                              <div className={`record-field-value${isFilled(edu.field_of_study) ? ' record-field-value-filled' : ''}`}>{edu.field_of_study || '-'}</div>
                             </div>
                             <div className="record-field">
                               <span className="record-field-label">Period</span>
                               <div className={`record-field-value${(edu.start_date || edu.end_date) ? ' record-field-value-filled' : ''}`}>
-                                {edu.start_date || ''} {edu.start_date && edu.end_date ? '–' : ''} {edu.end_date || ''}
+                                {edu.start_date || ''} {edu.start_date && edu.end_date ? '-' : ''} {edu.end_date || ''}
                               </div>
                             </div>
                             {edu.grade && (

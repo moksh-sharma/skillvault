@@ -5,6 +5,7 @@ from src.services.file_processor import extract_text_from_file
 from src.services import openai_service
 from src.schemas.resume import ParsedResume
 from src.utils.logger import get_logger
+from src.utils.text_normalize import normalize_dashes, normalize_dashes_deep
 
 logger = get_logger(__name__)
 
@@ -15,6 +16,95 @@ def normalize_skills(skills: List[str]) -> List[str]:
         return []
     normalized = [s.lower().strip() for s in skills if s and s.strip()]
     return list(set(normalized))
+
+
+def coerce_to_str(value, default: str = "") -> str:
+    """Coerce AI/form values to a plain string."""
+    if value is None:
+        return default
+    if isinstance(value, str):
+        return normalize_dashes(value.strip())
+    if isinstance(value, (int, float)):
+        return str(value).strip()
+    if isinstance(value, dict):
+        for v in value.values():
+            if isinstance(v, str) and v.strip():
+                return v.strip()
+        return default
+    if isinstance(value, list) and value:
+        return coerce_to_str(value[0], default)
+    s = str(value).strip()
+    return s if s else default
+
+
+def normalize_contact_info(value) -> str:
+    """Ensure resume_contact_info is a single email string (ParsedResume schema)."""
+    if value is None:
+        return "Not mentioned"
+    if isinstance(value, str):
+        s = value.strip()
+        if not s or s.lower() == "not mentioned":
+            return "Not mentioned"
+        return s
+    if isinstance(value, dict):
+        for key in ("email", "mail", "e_mail", "contact", "resume_contact_info"):
+            if key in value:
+                normalized = normalize_contact_info(value[key])
+                if normalized != "Not mentioned":
+                    return normalized
+        for v in value.values():
+            if isinstance(v, str) and "@" in v:
+                return v.strip()
+        for v in value.values():
+            if isinstance(v, str) and v.strip():
+                return v.strip()
+        return "Not mentioned"
+    if isinstance(value, list):
+        for item in value:
+            normalized = normalize_contact_info(item)
+            if normalized != "Not mentioned":
+                return normalized
+        return "Not mentioned"
+    s = str(value).strip()
+    return s if s else "Not mentioned"
+
+
+_STRING_DEFAULT_NOT_MENTIONED = (
+    "resume_candidate_name",
+    "resume_role",
+    "resume_location",
+    "resume_degree",
+    "resume_university",
+)
+
+
+def sanitize_parsed_data(data: Dict) -> Dict:
+    """Normalize types from LLM output so ParsedResume validation and APIs stay consistent."""
+    out = normalize_dashes_deep(dict(data))
+    out["resume_contact_info"] = normalize_contact_info(out.get("resume_contact_info"))
+
+    for key in _STRING_DEFAULT_NOT_MENTIONED:
+        if key in out:
+            val = coerce_to_str(out[key], "")
+            out[key] = val if val else "Not mentioned"
+
+    for key in (
+        "resume_phone",
+        "resume_address",
+        "resume_city",
+        "resume_country",
+        "resume_zip_code",
+        "current_company",
+    ):
+        if key in out:
+            out[key] = coerce_to_str(out[key], "")
+
+    try:
+        out["resume_experience"] = float(out.get("resume_experience") or 0)
+    except (TypeError, ValueError):
+        out["resume_experience"] = 0.0
+
+    return out
 
 
 def merge_skills(resume_skills: List[str], form_skills: Optional[str] = None) -> List[str]:
@@ -119,12 +209,13 @@ async def parse_resume(
     if not parsed_data.get('all_skills'):
         parsed_data['all_skills'] = normalize_skills(parsed_data.get('resume_technical_skills', []))
     
-    # Step 6: Validate against ParsedResume schema
+    # Step 6: Sanitize LLM types, then validate against ParsedResume schema
+    parsed_data = sanitize_parsed_data(parsed_data)
     try:
         validated = ParsedResume(**parsed_data)
         return validated.model_dump()
     except Exception as e:
-        logger.warning(f"Schema validation failed, using parsed data as-is: {e}")
+        logger.warning(f"Schema validation failed after sanitize, returning sanitized data: {e}")
         return parsed_data
 
 
@@ -224,9 +315,9 @@ def extract_certificates(text: str) -> List[str]:
             
             # Remove issuer info in parentheses or after dash
             clean_line = re.sub(r'\([^)]+\)', '', clean_line)
-            clean_line = re.sub(r'\s*[-–—]\s*[A-Z][a-z]+.*$', '', clean_line)
+            clean_line = re.sub(r'\s*[---]\s*[A-Z][a-z]+.*$', '', clean_line)
             
-            clean_line = clean_line.strip(' ,-–—')
+            clean_line = clean_line.strip(' ,---')
             
             if clean_line and len(clean_line) > 3 and len(clean_line) < 100:
                 found_certs.append(clean_line)

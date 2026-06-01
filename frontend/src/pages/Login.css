@@ -23,25 +23,33 @@
   pointer-events: none;
 }
 
-.logo-left,
-.logo-right {
-  height: 60px;
-  width: auto;
+.page-logos .logo-left,
+.page-logos .logo-right {
+  width: 63px;
+  height: 63px;
+  max-width: 63px;
+  max-height: 63px;
+  min-width: 63px;
+  min-height: 63px;
   object-fit: contain;
+  object-position: center;
+  display: block;
   pointer-events: auto;
   transition: transform 0.3s ease;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
-.logo-left:hover,
-.logo-right:hover {
+.page-logos .logo-left:hover,
+.page-logos .logo-right:hover {
   transform: scale(1.05);
 }
 
-.logo-left {
+.page-logos .logo-left {
   margin-right: auto;
 }
 
-.logo-right {
+.page-logos .logo-right {
   margin-left: auto;
 }
 
@@ -290,9 +298,14 @@
     padding: 1rem 1rem;
   }
 
-  .logo-left,
-  .logo-right {
-    height: 40px;
+  .page-logos .logo-left,
+  .page-logos .logo-right {
+    width: 48px;
+    height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+    min-width: 48px;
+    min-height: 48px;
   }
 
   .login-card {

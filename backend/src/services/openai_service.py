@@ -164,7 +164,7 @@ Return data as valid JSON only, no additional text."""
 
 Fields:
 "resume_candidate_name", 
-"resume_contact_info" (email), 
+"resume_contact_info" (email address as a single plain string, NOT an object - e.g. "user@example.com"), 
 "resume_phone" (phone number in any format - extract from contact section, header, or anywhere in resume),
 "resume_role" (current or most recent job title/role),
 "resume_location" (full location string like "City, Country" or "City, State, Country"),
@@ -242,8 +242,11 @@ IMPORTANT EXTRACTION RULES:
                     result["resume_city"] = parts[0]
         
         # Ensure all required fields have defaults
+        from src.services.resume_parser import normalize_contact_info
+
         result.setdefault("resume_candidate_name", "Not mentioned")
         result.setdefault("resume_contact_info", "Not mentioned")
+        result["resume_contact_info"] = normalize_contact_info(result.get("resume_contact_info"))
         result.setdefault("resume_phone", "")
         result.setdefault("resume_role", "Not mentioned")
         result.setdefault("resume_location", "Not mentioned")
@@ -260,6 +263,9 @@ IMPORTANT EXTRACTION RULES:
         result.setdefault("resume_achievements", [])
         result.setdefault("resume_certificates", [])
         result.setdefault("all_skills", [])
+
+        from src.utils.text_normalize import normalize_dashes_deep
+        result = normalize_dashes_deep(result)
         
         logger.info("Successfully parsed resume with Ollama")
         return result
@@ -639,7 +645,7 @@ async def extract_resume_evidence_v2(resume_data: Dict, jd_structure_v2: Dict) -
                 wh_lines.append(line)
     work_history_block = "\n".join(wh_lines)[:1000]
 
-    # Bounded raw text — smaller window keeps remote Ollama calls under timeout
+    # Bounded raw text - smaller window keeps remote Ollama calls under timeout
     raw_text_block = (resume_data.get("raw_text") or "")[:4000]
 
     system_prompt = """You are a Resume Evidence Extractor for ATS matching.

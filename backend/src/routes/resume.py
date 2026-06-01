@@ -20,7 +20,7 @@ from src.config.settings import settings
 from src.config.database import get_postgres_db
 from src.middleware.auth_middleware import get_admin_user, get_current_user, decode_access_token, is_token_blacklisted
 from src.services.storage import save_uploaded_file, delete_file
-from src.services.resume_parser import parse_resume
+from src.services.resume_parser import parse_resume, normalize_contact_info, coerce_to_str
 from src.utils.validators import validate_file_type
 from src.utils.logger import get_logger
 from src.utils.response_formatter import format_resume_response, format_resume_list_response
@@ -73,8 +73,8 @@ async def parse_resume_only(
     No authentication required - works for all users including guests, employees, and freelancers.
     IMPORTANT: This function is registered directly on the app in main.py to avoid route conflicts.
     """
-    logger.info(f"✅ Parse-only endpoint CALLED for file: {file.filename if file.filename else 'unknown'}")
-    logger.info(f"✅ Request received - POST /api/resumes/parse-only")
+    logger.info(f"Parse-only endpoint CALLED for file: {file.filename if file.filename else 'unknown'}")
+    logger.info("Request received - POST /api/resumes/parse-only")
     file_path = None
     try:
         # Validate file
@@ -142,25 +142,28 @@ async def parse_resume_only(
             university = parsed_data.get('resume_university', '')
             education = f"{degree} - {university}".strip(' -') if degree != "Not mentioned" or university != "Not mentioned" else ''
             
+            contact_email = normalize_contact_info(parsed_data.get('resume_contact_info'))
+            email_for_form = '' if contact_email == "Not mentioned" else contact_email
+
             # Return formatted data for frontend
             return {
                 'success': True,
                 'data': {
-                    'firstName': firstName,
-                    'lastName': lastName,
-                    'email': parsed_data.get('resume_contact_info', '') if parsed_data.get('resume_contact_info') != "Not mentioned" else '',
-                    'phone': phone,
-                    'address': address,
-                    'city': city,
-                    'country': country,
-                    'zipCode': zip_code,
-                    'location': location if location != "Not mentioned" else '',
-                    'role': parsed_data.get('resume_role', '') if parsed_data.get('resume_role') != "Not mentioned" else '',
-                    'currentCompany': current_company,
-                    'experience': str(int(parsed_data.get('resume_experience', 0))),
-                    'skills': skills,
-                    'education': education,
-                    'fullName': full_name if full_name != "Not mentioned" else ''
+                    'firstName': coerce_to_str(firstName, ''),
+                    'lastName': coerce_to_str(lastName, ''),
+                    'email': email_for_form,
+                    'phone': coerce_to_str(phone, ''),
+                    'address': coerce_to_str(address, ''),
+                    'city': coerce_to_str(city, ''),
+                    'country': coerce_to_str(country, ''),
+                    'zipCode': coerce_to_str(zip_code, ''),
+                    'location': coerce_to_str(location, '') if location != "Not mentioned" else '',
+                    'role': coerce_to_str(parsed_data.get('resume_role', ''), '') if parsed_data.get('resume_role') != "Not mentioned" else '',
+                    'currentCompany': coerce_to_str(current_company, ''),
+                    'experience': str(int(parsed_data.get('resume_experience', 0) or 0)),
+                    'skills': coerce_to_str(skills, ''),
+                    'education': coerce_to_str(education, ''),
+                    'fullName': coerce_to_str(full_name, '') if full_name != "Not mentioned" else ''
                 }
             }
         finally:

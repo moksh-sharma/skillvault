@@ -6,6 +6,7 @@ import {
   getEmployeeList,
   getEmployeeListLeftAfterUpload
 } from '../../config/api'
+import { emitAdminActivity } from '../../utils/adminActivity'
 import './EmployeeListConfig.css'
 
 const EmployeeListConfig = () => {
@@ -89,6 +90,7 @@ const EmployeeListConfig = () => {
       setFile(null)
       await fetchConfig()
       if ((data.count || 0) > 0) await fetchList()
+      emitAdminActivity({ type: 'employee_list', count: data.count })
     } catch (err) {
       const msg = err.message || err.detail || 'Upload failed'
       // If server still returns CSV-only message, guide user to restart backend or use CSV
@@ -169,9 +171,9 @@ const EmployeeListConfig = () => {
                       <tbody>
                         {leftEmployeesModal.left_employees.map((e, i) => (
                           <tr key={e.user_id || i}>
-                            <td>{e.employee_id || '—'}</td>
-                            <td>{e.full_name || '—'}</td>
-                            <td>{e.email || '—'}</td>
+                            <td>{e.employee_id || '-'}</td>
+                            <td>{e.full_name || '-'}</td>
+                            <td>{e.email || '-'}</td>
                           </tr>
                         ))}
                       </tbody>

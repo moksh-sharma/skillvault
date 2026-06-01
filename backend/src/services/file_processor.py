@@ -4,6 +4,7 @@ import pdfplumber
 from docx import Document
 from typing import Optional
 from src.utils.logger import get_logger
+from src.utils.text_normalize import normalize_dashes
 import shutil
 import subprocess
 import tempfile
@@ -176,14 +177,17 @@ def extract_text_from_doc(file_path: str) -> str:
 def extract_text_from_file(file_path: str, file_extension: str) -> str:
     """Extract text from file based on extension."""
     ext = file_extension.lower().replace('.', '')
-    
+    text = ""
+
     if ext == 'pdf':
-        return extract_text_from_pdf(file_path)
+        text = extract_text_from_pdf(file_path)
     elif ext == 'docx':
-        return extract_text_from_docx(file_path)
+        text = extract_text_from_docx(file_path)
     elif ext == 'doc':
-        return extract_text_from_doc(file_path)
+        text = extract_text_from_doc(file_path)
     else:
         logger.error(f"Unsupported file extension: {ext}")
         return ""
+
+    return normalize_dashes(text) if text else ""
 

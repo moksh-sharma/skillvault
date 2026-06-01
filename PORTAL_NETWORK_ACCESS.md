@@ -1,6 +1,6 @@
 # Portal network URLs (other PCs on same network)
 
-Other devices on your **same Wi‑Fi/LAN** can open the portals using your PC’s **network IP** and these ports.
+Other devices on your **same Wi-Fi/LAN** can open the portals using your PC’s **network IP** and these ports.
 
 ---
 
@@ -56,4 +56,4 @@ Other devices on your **same Wi‑Fi/LAN** can open the portals using your PC’
    - Allow inbound TCP for ports **3005**, **3006**, **3007** (and **8000** if the backend is on this PC).
 
 4. **Same network**
-   - Other devices must be on the same LAN/Wi‑Fi as the PC running the portals.
+   - Other devices must be on the same LAN/Wi-Fi as the PC running the portals.

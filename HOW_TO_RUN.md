@@ -163,7 +163,7 @@ npm install
 Create `.env` file in `frontend/` directory (optional):
 
 ```env
-# API base (Vite). Optional — see frontend/.env.example
+# API base (Vite). Optional - see frontend/.env.example
 # Direct dev on :3005 defaults to http://<hostname>:8000/api
 # Behind nginx on :80, omit this so the app uses same-origin /api
 # VITE_API_URL=http://127.0.0.1:8002/api
@@ -178,11 +178,11 @@ Create `.env` file in `frontend/` directory (optional):
 npm run dev
 ```
 
-**Clean URL (no port in the address bar — `http://127.0.0.1/`):**
+**Clean URL (no port in the address bar - `http://127.0.0.1/`):**
 
 Vite still listens on **3005** internally; **nginx** on port **80** proxies to it so the browser never shows `:3005`.
 
-1. Start backend on `0.0.0.0` (e.g. port **8002** — must match `api_dev` in `nginx/nginx.host-dev-native.conf`).
+1. Start backend on `0.0.0.0` (e.g. port **8002** - must match `api_dev` in `nginx/nginx.host-dev-native.conf`).
 2. **Native nginx on Windows (no Docker):** install nginx (`winget install nginxinc.nginx`), then from repo root:
    ```powershell
    .\scripts\start-nginx-local-reverse-proxy.ps1

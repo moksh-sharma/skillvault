@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { API_ENDPOINTS, uploadFile } from '../../config/api'
+import { emitAdminActivity } from '../../utils/adminActivity'
 import './AddNewResume.css'
 
 const AddNewResume = () => {
@@ -86,14 +87,8 @@ const AddNewResume = () => {
         setMessage(`Successfully uploaded ${response.success} resumes. ${response.failed} failed.`)
         setFiles([])
 
-        // Trigger a custom event to refresh dashboard and records
-        console.log('🔄 Dispatching resumeUploaded event with count:', response.success)
-        window.dispatchEvent(new CustomEvent('resumeUploaded', { detail: { count: response.success } }))
-        
-        // Also force a small delay and refresh to ensure data is updated
-        setTimeout(() => {
-          window.dispatchEvent(new CustomEvent('resumeUploaded', { detail: { count: response.success } }))
-        }, 1000)
+        emitAdminActivity({ type: 'resume_upload', count: response.success })
+        setTimeout(() => emitAdminActivity({ type: 'resume_upload', count: response.success }), 1500)
       }
     } catch (err) {
       console.error('Upload failed:', err)
@@ -124,7 +119,7 @@ const AddNewResume = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <h3>📄 Upload Summary</h3>
+        <h3>Upload Summary</h3>
         <div className="summary-grid">
           <div className="summary-item">
             <span className="summary-label">Files Ready:</span>
@@ -147,7 +142,7 @@ const AddNewResume = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
       >
-        <h3>📁 Upload Resume Files</h3>
+        <h3>Upload Resume Files</h3>
         <div
           className={`resume-drop-zone ${dragActive ? 'drag-active' : ''} ${files.length > 0 ? 'has-files' : ''}`}
           onDragEnter={handleDrag}
@@ -213,7 +208,7 @@ const AddNewResume = () => {
               Uploading...
             </span>
           ) : (
-            '🚀 Upload All Resumes to Database'
+            'Upload All Resumes to Database'
           )}
         </button>
       </motion.div>

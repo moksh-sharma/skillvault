@@ -1,6 +1,6 @@
 # Troubleshooting
 
-## 404 (Not Found) – "Failed to load resource"
+## 404 (Not Found) - "Failed to load resource"
 
 - **Meaning:** The browser requested a URL and the server said the resource does not exist.
 - **What to do:**
@@ -13,11 +13,11 @@
 
 - **Meaning:** The login request reached the server but the credentials were rejected.
 - **Backend behavior:** The API returns 401 when:
-  - **Invalid email** – no user in the database with that email.
-  - **Invalid password** – user exists but the password is wrong.
+  - **Invalid email** - no user in the database with that email.
+  - **Invalid password** - user exists but the password is wrong.
 - **If the `users` table is empty:** Every login will return 401 until you create at least one user.
 
-**Fix – create a user:**
+**Fix - create a user:**
 
 1. **Sign up in the app**  
    Use the normal **Sign Up** flow in the UI and then log in with that email and password.

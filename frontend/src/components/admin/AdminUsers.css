@@ -26,12 +26,6 @@
   color: var(--color-text-dark);
 }
 
-.invite-user-hint {
-  margin: 0 0 1rem 0;
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-}
-
 .invite-user-form {
   display: flex;
   flex-wrap: wrap;

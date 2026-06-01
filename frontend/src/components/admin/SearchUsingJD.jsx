@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { API_BASE_URL } from '../../config/api'
+import { emitAdminActivity } from '../../utils/adminActivity'
 import './SearchUsingJD.css'
 
 const ResultCard = ({ match, index, dimensionLabels = {} }) => {
@@ -280,6 +281,7 @@ const SearchUsingJD = () => {
       const data = await response.json()
       console.log('JD Analysis Results (v2):', data)
       setResults(data)
+      emitAdminActivity({ type: 'jd_analysis' })
 
     } catch (err) {
       console.error('JD Analysis error:', err)
@@ -300,7 +302,7 @@ const SearchUsingJD = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
       >
-        <h2>📄 Job Description</h2>
+        <h2>Job Description</h2>
 
         <div className="jd-method-tabs">
           <button
@@ -377,7 +379,7 @@ const SearchUsingJD = () => {
           onClick={handleFindCandidates}
           disabled={loading || (jdMethod === 'upload' ? !file : !jdText.trim())}
         >
-          {loading ? 'Analyzing...' : '🚀 Find Matching Candidates'}
+          {loading ? 'Analyzing...' : 'Find Matching Candidates'}
         </button>
       </motion.div>
 

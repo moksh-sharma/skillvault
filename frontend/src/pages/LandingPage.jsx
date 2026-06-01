@@ -156,11 +156,7 @@ const LandingPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                     >
-                        <h1 className="brand-title">{APP_NAME}</h1>
-                        <div className="brand-tagline">
-                            <span className="powered-by-text">powered by</span>
-                            <img src={CACHE_LOGO_SRC} alt="CACHE" className="cache-logo" />
-                        </div>
+                        <h1 className="brand-title navbar-heading">{APP_NAME}</h1>
                     </motion.div>
 
                     <form onSubmit={handleSubmit} className="login-form">
@@ -230,7 +226,7 @@ const LandingPage = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}
                         >
-                            {isLoading ? 'Authenticating...' : 'Login to Admin Panel'}
+                            {isLoading ? 'Authenticating...' : 'Login'}
                         </motion.button>
                     </form>
                 </div>

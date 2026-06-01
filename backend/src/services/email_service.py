@@ -37,7 +37,7 @@ def send_admin_invite_email(
             "Email is not configured. Set AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET and MAILBOX_EMAIL to send invites."
         )
 
-    subject = "Welcome to SkillVault – Set Your Password"
+    subject = "Welcome to SkillVault - Set Your Password"
     body_plain = f"""Hello,
 
 You have been invited to access the SkillVault Admin Portal.

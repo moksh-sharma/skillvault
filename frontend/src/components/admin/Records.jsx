@@ -42,7 +42,7 @@ const renderSafe = (value, fallback = 'N/A') => {
     return value;
 }
 
-const EMPTY_PLACEHOLDERS = ['', 'n/a', '—', 'no work experience records found', 'no education records found', 'no skills detected', 'no certifications found']
+const EMPTY_PLACEHOLDERS = ['', 'n/a', '-', 'no work experience records found', 'no education records found', 'no skills detected', 'no certifications found']
 const isFilled = (value) => {
     if (value === null || value === undefined) return false
     if (typeof value === 'number' && !Number.isNaN(value)) return true
@@ -195,21 +195,27 @@ const Records = ({ initialFilter, setInitialFilter }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <div className="table-container" style={{ marginTop: 0 }}>
-                    <table className="data-table">
-                        <colgroup>
-                            <col style={{ width: '4%' }} />
-                            <col style={{ width: '16%' }} />
-                            <col style={{ width: '8%' }} />
-                            <col style={{ width: '8%' }} />
-                            <col style={{ width: '8%' }} />
-                            <col style={{ width: '7%' }} />
-                            <col style={{ width: '6%' }} />
-                            <col style={{ width: '6%' }} />
-                            <col style={{ width: '11%' }} />
-                            <col style={{ width: '18%' }} />
-                            <col style={{ width: '8%' }} />
-                        </colgroup>
+                <div
+                    className="table-container records-table-scroll"
+                    data-lenis-prevent
+                    tabIndex={0}
+                    role="region"
+                    aria-label="Candidate records table"
+                    onWheel={(e) => {
+                        const el = e.currentTarget
+                        const canScrollY = el.scrollHeight > el.clientHeight
+                        const canScrollX = el.scrollWidth > el.clientWidth
+                        if (!canScrollY && !canScrollX) return
+                        const atTop = el.scrollTop <= 0
+                        const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1
+                        const atLeft = el.scrollLeft <= 0
+                        const atRight = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1
+                        const scrollingY = (e.deltaY < 0 && !atTop) || (e.deltaY > 0 && !atBottom)
+                        const scrollingX = (e.deltaX < 0 && !atLeft) || (e.deltaX > 0 && !atRight)
+                        if (scrollingY || scrollingX) e.stopPropagation()
+                    }}
+                >
+                    <table className="data-table records-data-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -282,7 +288,6 @@ const Records = ({ initialFilter, setInitialFilter }) => {
                                         <td><span className="id-badge">#{index + 1}</span></td>
                                         <td>
                                             <div className="name-cell">
-                                                <div className="avatar-sm">{getInitials(resume.name || resume.full_name || 'N/A')}</div>
                                                 <div className="name-info">
                                                     <span className="candidate-name" title={renderSafe(resume.name || resume.full_name)}>{renderSafe(resume.name || resume.full_name, 'Anonymous')}</span>
                                                     <span className="candidate-email-sub" title={renderSafe(resume.email)}>{renderSafe(resume.email, 'No Email')}</span>
@@ -355,7 +360,7 @@ const Records = ({ initialFilter, setInitialFilter }) => {
                                                     )
                                                 })()}
                                                 {!(resume.linked_in || resume.meta_data?.form_data?.linkedIn || resume.portfolio || resume.meta_data?.form_data?.portfolio) && (
-                                                    <span className="na-text">—</span>
+                                                    <span className="na-text">-</span>
                                                 )}
                                             </div>
                                         </td>
@@ -574,7 +579,7 @@ const CandidateDetailModal = ({ candidate, onClose, onTypeUpdated, onRecordsRefr
                                 <div className="record-field">
                                     <span className="record-field-label">Relocation Status & Preference</span>
                                     <div className="record-field-value record-field-value-filled">
-                                        {candidate.ready_to_relocate ? `Ready to Relocate${candidate.preferred_location ? ` — Preferred: ${candidate.preferred_location}` : ''}` : 'Not open to relocation'}
+                                        {candidate.ready_to_relocate ? `Ready to Relocate${candidate.preferred_location ? ` - Preferred: ${candidate.preferred_location}` : ''}` : 'Not open to relocation'}
                                     </div>
                                 </div>
                             </div>
@@ -622,20 +627,20 @@ const CandidateDetailModal = ({ candidate, onClose, onTypeUpdated, onRecordsRefr
                                         <div key={idx} className="experience-item record-field-block">
                                             <div className="record-field">
                                                 <span className="record-field-label">Role</span>
-                                                <div className={`record-field-value${isFilled(exp.role) ? ' record-field-value-filled' : ''}`}>{exp.role || '—'}</div>
+                                                <div className={`record-field-value${isFilled(exp.role) ? ' record-field-value-filled' : ''}`}>{exp.role || '-'}</div>
                                             </div>
                                             <div className="record-field">
                                                 <span className="record-field-label">Company</span>
-                                                <div className={`record-field-value${isFilled(exp.company) ? ' record-field-value-filled' : ''}`}>{exp.company || '—'}</div>
+                                                <div className={`record-field-value${isFilled(exp.company) ? ' record-field-value-filled' : ''}`}>{exp.company || '-'}</div>
                                             </div>
                                             <div className="record-field">
                                                 <span className="record-field-label">Location</span>
-                                                <div className={`record-field-value${isFilled(exp.location) ? ' record-field-value-filled' : ''}`}>{exp.location || '—'}</div>
+                                                <div className={`record-field-value${isFilled(exp.location) ? ' record-field-value-filled' : ''}`}>{exp.location || '-'}</div>
                                             </div>
                                             <div className="record-field">
                                                 <span className="record-field-label">Period</span>
                                                 <div className={`record-field-value${(exp.start_date || exp.end_date) ? ' record-field-value-filled' : ''}`}>
-                                                    {exp.start_date || ''} {exp.start_date && exp.end_date ? '–' : ''} {exp.end_date || ''}
+                                                    {exp.start_date || ''} {exp.start_date && exp.end_date ? '-' : ''} {exp.end_date || ''}
                                                     {exp.is_current ? ' (Current)' : ''}
                                                 </div>
                                             </div>
@@ -664,20 +669,20 @@ const CandidateDetailModal = ({ candidate, onClose, onTypeUpdated, onRecordsRefr
                                         <div key={idx} className="education-item record-field-block">
                                             <div className="record-field">
                                                 <span className="record-field-label">Degree</span>
-                                                <div className={`record-field-value${isFilled(edu.degree) ? ' record-field-value-filled' : ''}`}>{edu.degree || '—'}</div>
+                                                <div className={`record-field-value${isFilled(edu.degree) ? ' record-field-value-filled' : ''}`}>{edu.degree || '-'}</div>
                                             </div>
                                             <div className="record-field">
                                                 <span className="record-field-label">Institution</span>
-                                                <div className={`record-field-value${isFilled(edu.institution) ? ' record-field-value-filled' : ''}`}>{edu.institution || '—'}</div>
+                                                <div className={`record-field-value${isFilled(edu.institution) ? ' record-field-value-filled' : ''}`}>{edu.institution || '-'}</div>
                                             </div>
                                             <div className="record-field">
                                                 <span className="record-field-label">Field of study</span>
-                                                <div className={`record-field-value${isFilled(edu.field_of_study) ? ' record-field-value-filled' : ''}`}>{edu.field_of_study || '—'}</div>
+                                                <div className={`record-field-value${isFilled(edu.field_of_study) ? ' record-field-value-filled' : ''}`}>{edu.field_of_study || '-'}</div>
                                             </div>
                                             <div className="record-field">
                                                 <span className="record-field-label">Period</span>
                                                 <div className={`record-field-value${(edu.start_date || edu.end_date) ? ' record-field-value-filled' : ''}`}>
-                                                    {edu.start_date || ''} {edu.start_date && edu.end_date ? '–' : ''} {edu.end_date || ''}
+                                                    {edu.start_date || ''} {edu.start_date && edu.end_date ? '-' : ''} {edu.end_date || ''}
                                                 </div>
                                             </div>
                                             {edu.grade && (

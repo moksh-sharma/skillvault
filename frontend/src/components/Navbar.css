@@ -49,20 +49,8 @@
 }
 
 .navbar-heading {
-  font-size: 1.8rem;
-  font-weight: 800;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
   cursor: pointer;
   user-select: none;
-  letter-spacing: -1.5px;
-  white-space: nowrap;
-  display: inline-block;
-  margin: 0;
-  text-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
 }
 
 /* Center heading (role title on application page) */
@@ -147,6 +135,38 @@
 .nav-glass-tab:hover .tab-label {
   max-width: 140px;
   opacity: 1;
+}
+
+.nav-glass-tab.nav-guide-tab {
+  background: rgba(14, 165, 233, 0.08);
+  border-color: rgba(14, 165, 233, 0.25);
+}
+
+.nav-glass-tab.nav-guide-tab .tab-label {
+  max-width: 72px;
+  opacity: 1;
+}
+
+.nav-glass-tab.nav-guide-tab:hover {
+  transform: scale(1.05);
+}
+
+.nav-glass-tab .guide-tab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: rgba(14, 165, 233, 0.2);
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.nav-glass-tab.guide-highlight-tab {
+  box-shadow: 0 0 0 2px #0ea5e9, 0 4px 14px rgba(14, 165, 233, 0.35);
+  z-index: 2;
 }
 
 .nav-glass-tab.active {
@@ -493,16 +513,37 @@
   background: rgba(120, 53, 15, 0.12);
 }
 
+.navbar-notification-type-tag--job-created {
+  color: #1d4ed8;
+  background: rgba(29, 78, 216, 0.12);
+}
+
+.navbar-notification-type-tag--job-updated {
+  color: #6d28d9;
+  background: rgba(109, 40, 217, 0.12);
+}
+
+.navbar-notification-type-tag--jd {
+  color: #0e7490;
+  background: rgba(14, 116, 144, 0.12);
+}
+
+.navbar-notification-type-tag--employees {
+  color: #047857;
+  background: rgba(4, 120, 87, 0.12);
+}
+
+.navbar-notification-type-tag--invite {
+  color: #9333ea;
+  background: rgba(147, 51, 234, 0.12);
+}
+
+.navbar-notification-type-tag--signup {
+  color: #c2410c;
+  background: rgba(194, 65, 12, 0.12);
+}
+
 /* Differentiate by type: left border + subtle background */
-.navbar-notification-item--reminder {
-  border-left-color: #0d9488;
-  background: rgba(13, 148, 136, 0.04);
-}
-
-.navbar-notification-item--reminder .navbar-notification-message {
-  color: #0f766e;
-}
-
 .navbar-notification-item--login {
   border-left-color: #0284c7;
   background: rgba(2, 132, 199, 0.04);
@@ -521,13 +562,45 @@
   color: #14532d;
 }
 
-.navbar-notification-item--resume_upload {
+.navbar-notification-item--resume_upload,
+.navbar-notification-item--email_fetch {
   border-left-color: #b45309;
   background: rgba(180, 83, 9, 0.04);
 }
 
-.navbar-notification-item--resume_upload .navbar-notification-message {
+.navbar-notification-item--resume_upload .navbar-notification-message,
+.navbar-notification-item--email_fetch .navbar-notification-message {
   color: #78350f;
+}
+
+.navbar-notification-item--job_created {
+  border-left-color: #2563eb;
+  background: rgba(37, 99, 235, 0.04);
+}
+
+.navbar-notification-item--job_updated {
+  border-left-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.04);
+}
+
+.navbar-notification-item--jd_analysis {
+  border-left-color: #0891b2;
+  background: rgba(8, 145, 178, 0.04);
+}
+
+.navbar-notification-item--employee_list {
+  border-left-color: #059669;
+  background: rgba(5, 150, 105, 0.04);
+}
+
+.navbar-notification-item--admin_invite {
+  border-left-color: #a855f7;
+  background: rgba(168, 85, 247, 0.04);
+}
+
+.navbar-notification-item--user_registered {
+  border-left-color: #ea580c;
+  background: rgba(234, 88, 12, 0.04);
 }
 
 .navbar-notification-item--default {

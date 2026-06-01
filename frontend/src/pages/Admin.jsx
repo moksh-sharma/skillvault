@@ -12,12 +12,16 @@ import EmployeeListConfig from '../components/admin/EmployeeListConfig'
 import AdminUsers from '../components/admin/AdminUsers'
 import CyberBackground from '../components/admin/CyberBackground'
 import HelpAssistant from '../components/admin/HelpAssistant'
+import AdminGuideWalkthrough from '../components/admin/AdminGuideWalkthrough'
+import { getAdminGuideSteps } from '../components/admin/adminGuideSteps'
 import './Admin.css'
 
 const Admin = () => {
   const { userProfile } = useApp()
   const [activeTab, setActiveTab] = useState('dashboard')
   const [initialFilter, setInitialFilter] = useState(null)
+  const [guideActive, setGuideActive] = useState(false)
+  const [guideStep, setGuideStep] = useState(0)
 
   const navigateToRecords = (filter = null) => {
     setInitialFilter(filter)
@@ -41,6 +45,14 @@ const Admin = () => {
     if (isAdminRoleOnly) return all
     return all.filter((t) => t.id !== 'employee-list' && t.id !== 'users')
   }, [isAdminRoleOnly])
+
+  const guideSteps = useMemo(() => getAdminGuideSteps(isAdminRoleOnly), [isAdminRoleOnly])
+  const guideHighlightTab = guideActive ? guideSteps[guideStep]?.tab ?? null : null
+
+  const startGuide = () => {
+    setGuideStep(0)
+    setGuideActive(true)
+  }
 
   useEffect(() => {
     if (!isAdminRoleOnly && (activeTab === 'employee-list' || activeTab === 'users')) {
@@ -82,6 +94,8 @@ const Admin = () => {
         adminTabs={tabs}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        onStartGuide={startGuide}
+        guideHighlightTab={guideHighlightTab}
       />
 
       <div className="admin-content">
@@ -90,7 +104,16 @@ const Admin = () => {
         </div>
       </div>
 
-      {/* Hide help assistant FAB for now */}
+      {guideActive && (
+        <AdminGuideWalkthrough
+          steps={guideSteps}
+          stepIndex={guideStep}
+          setStepIndex={setGuideStep}
+          onClose={() => setGuideActive(false)}
+          setActiveTab={setActiveTab}
+        />
+      )}
+
       {import.meta.env.VITE_ENABLE_HELP_ASSISTANT === 'true' ? <HelpAssistant /> : null}
     </div>
   )

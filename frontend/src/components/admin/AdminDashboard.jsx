@@ -8,6 +8,7 @@ import {
   RadialBarChart, RadialBar
 } from 'recharts'
 import { API_BASE_URL } from '../../config/api'
+import { emitAdminActivity } from '../../utils/adminActivity'
 import './AdminDashboard.css'
 
 // Helper to clean text from unwanted characters
@@ -220,6 +221,8 @@ const AdminDashboard = ({ onNavigateToRecords }) => {
       const data = await response.json()
       if (response.ok) {
         setSyncStatus({ success: true, message: 'Outlook sync pipeline activated!' })
+        emitAdminActivity({ type: 'outlook_sync' })
+        setTimeout(() => emitAdminActivity({ type: 'outlook_sync' }), 5000)
         setTimeout(() => setSyncStatus(null), 5000)
       } else {
         throw new Error(data.detail || 'Failed to trigger Outlook sync')

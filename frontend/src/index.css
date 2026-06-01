@@ -10,6 +10,12 @@ html.lenis, html.lenis body {
 
 .lenis.lenis-smooth [data-lenis-prevent] {
   overscroll-behavior: contain;
+  touch-action: auto;
+}
+
+.records-table-scroll[data-lenis-prevent] {
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch;
 }
 
 .lenis.lenis-stopped {
@@ -70,6 +76,21 @@ html.lenis, html.lenis body {
   --chart-muted: #64748B;
   --radius-card-clay: 16px;
   --shadow-clay: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+
+  /* Form controls */
+  --input-height: 48px;
+  --input-bg: #ffffff;
+  --input-bg-hover: #ffffff;
+  --input-border: #e2e8f0;
+  --input-border-hover: #cbd5e1;
+  --input-text: var(--color-text-dark);
+  --input-placeholder: #94a3b8;
+  --input-focus-border: var(--color-accent-teal);
+  --input-focus-ring: rgba(14, 165, 233, 0.2);
+  --input-radius: 10px;
+  --input-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --input-shadow-focus: 0 0 0 4px var(--input-focus-ring), 0 1px 2px rgba(15, 23, 42, 0.06);
+  --select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
 }
 
 .clay-card {
@@ -77,6 +98,39 @@ html.lenis, html.lenis body {
   border-radius: var(--radius-card-clay);
   box-shadow: var(--shadow-clay);
   border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+/* Auth page corner logos - fixed square slots */
+.login-container .page-logos .logo-left,
+.login-container .page-logos .logo-right {
+  width: 63px;
+  height: 63px;
+  max-width: 63px;
+  max-height: 63px;
+  min-width: 63px;
+  min-height: 63px;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* SkillVault wordmark - shared by navbar and login */
+.app-brand-heading,
+.navbar-heading,
+.brand-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -1.5px;
+  white-space: nowrap;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
 }
 
 * {
@@ -183,7 +237,7 @@ code {
   left: 0;
 }
 
-/* Dark mode – applied when data-theme="dark" on <html> */
+/* Dark mode - applied when data-theme="dark" on <html> */
 [data-theme="dark"] {
   --color-bg-base: #1a1a1f;
   --color-card-surface: #252530;
@@ -202,6 +256,14 @@ code {
   --chart-text: #e2e4e9;
   --chart-muted: #9ca3af;
   --shadow-clay: 0 20px 40px rgba(0, 0, 0, 0.3);
+  --input-bg: #1e293b;
+  --input-bg-hover: #253045;
+  --input-border: rgba(148, 163, 184, 0.25);
+  --input-border-hover: rgba(148, 163, 184, 0.4);
+  --input-text: var(--color-text-dark);
+  --input-placeholder: #64748b;
+  --input-focus-ring: rgba(14, 165, 233, 0.35);
+  --select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
 }
 
 [data-theme="dark"] body {
@@ -214,7 +276,7 @@ code {
   opacity: 0.12;
 }
 
-/* Dark mode: text hierarchy – primary vs muted (so not everything is the same white) */
+/* Dark mode: text hierarchy - primary vs muted (so not everything is the same white) */
 [data-theme="dark"] .cyber-value.secondary,
 [data-theme="dark"] .cyber-info-box label,
 [data-theme="dark"] [class*="muted"],
@@ -230,8 +292,196 @@ code {
   color: var(--color-text-dark) !important;
 }
 
-/* Muted / secondary text in dark mode – not white, so hierarchy is clear */
+/* Muted / secondary text in dark mode - not white, so hierarchy is clear */
 [data-theme="dark"] .cyber-info-box label {
   color: var(--color-text-muted) !important;
+}
+
+/* ==========================================================================
+   SkillVault - unified inputs, selects, textareas
+   ========================================================================== */
+
+.form-group label,
+.filter-group label,
+.field-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text-dark);
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.01em;
+}
+
+.form-group label .required,
+label .required {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.sv-field,
+input[type="text"]:not(.no-sv-field),
+input[type="email"]:not(.no-sv-field),
+input[type="password"]:not(.no-sv-field),
+input[type="number"]:not(.no-sv-field),
+input[type="tel"]:not(.no-sv-field),
+input[type="url"]:not(.no-sv-field),
+input[type="search"]:not(.no-sv-field),
+input[type="date"]:not(.no-sv-field),
+input[type="time"]:not(.no-sv-field),
+.form-group input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+.form-group select,
+.form-group textarea,
+.filter-group input,
+.filter-group select,
+.hybrid-input,
+.hybrid-input-wrapper input,
+.signup-select,
+.sidebar-input,
+.sidebar-select,
+.jd-textarea,
+.sort-select,
+.results-summary-badges .sort-select,
+.sidebar-search-box input,
+.admin-content-area input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+.admin-content-area select,
+.admin-content-area textarea,
+.login-card input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+.login-card select,
+.login-card textarea,
+.application-form input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+.application-form select,
+.application-form textarea {
+  width: 100%;
+  min-height: var(--input-height);
+  height: var(--input-height);
+  padding: 0 1rem;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--input-text);
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--input-radius);
+  box-shadow: var(--input-shadow);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+textarea.sv-field,
+.form-group textarea,
+.jd-textarea,
+.admin-content-area textarea,
+.login-card textarea,
+.application-form textarea {
+  height: auto;
+  min-height: 120px;
+  padding: 0.75rem 1rem;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+select.sv-field,
+.form-group select,
+.filter-group select,
+.signup-select,
+.sidebar-select,
+.sort-select,
+.results-summary-badges .sort-select,
+.admin-content-area select,
+.login-card select,
+.application-form select {
+  padding-right: 2.75rem;
+  cursor: pointer;
+  background-image: var(--select-chevron);
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 1rem;
+}
+
+.sv-field::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: var(--input-placeholder);
+  font-weight: 400;
+  opacity: 1;
+}
+
+.sv-field:hover:not(:disabled):not(:read-only),
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):hover:not(:disabled):not(:read-only),
+select:hover:not(:disabled),
+textarea:hover:not(:disabled):not(:read-only) {
+  border-color: var(--input-border-hover);
+  background-color: var(--input-bg-hover);
+}
+
+.sv-field:focus,
+.sv-field:focus-visible,
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):focus,
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):focus-visible,
+select:focus,
+select:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: var(--input-shadow-focus);
+  background-color: var(--input-bg);
+}
+
+.sv-field:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background-color: #f1f5f9;
+}
+
+.sv-field.error,
+input.error,
+select.error,
+textarea.error {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.sv-field.error:focus,
+input.error:focus,
+select.error:focus,
+textarea.error:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+}
+
+.password-input-wrapper input {
+  padding-right: 2.75rem;
+}
+
+.password-input-wrapper .password-toggle {
+  color: var(--color-text-muted);
+}
+
+.password-input-wrapper .password-toggle:hover {
+  color: var(--input-focus-border);
+  background: rgba(14, 165, 233, 0.1);
+}
+
+[data-theme="dark"] .sv-field:disabled,
+[data-theme="dark"] input:disabled,
+[data-theme="dark"] select:disabled,
+[data-theme="dark"] textarea:disabled {
+  background-color: #1a1f2e;
+}
+
+[data-theme="dark"] .sv-field.error,
+[data-theme="dark"] input.error,
+[data-theme="dark"] select.error,
+[data-theme="dark"] textarea.error {
+  background-color: rgba(239, 68, 68, 0.08);
 }
 

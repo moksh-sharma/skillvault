@@ -193,12 +193,12 @@ STATIC_ANSWERS = {
     "list_skills_available": "You can search by any skill that appears in resumes, for example: Python, Java, SQL, React, AWS, JavaScript, C++, Excel, PowerBI, AI/ML, and more. Try: \"Find people with Python and SQL\".",
     "fallback": (
         "I'm not able to answer that from the data I have. Here's how you can navigate the platform:\n\n"
-        "• **Dashboard** — Open from the top navbar for overview and stats.\n"
-        "• **Search Talent** — Use the tab in the navbar to search by skills, location, experience, role; set filters and click Search.\n"
-        "• **Records** — In the admin top bar, go to **Records** to view all candidate records.\n"
-        "• **Add New Resume** — Tab in the navbar; upload PDF or DOCX resumes there.\n"
-        "• **Employee List** — Tab in the navbar to upload or replace the company employee CSV.\n"
-        "• **Users** (Admin only) — Manage platform users from the admin area.\n\n"
+        "• **Dashboard** - Open from the top navbar for overview and stats.\n"
+        "• **Search Talent** - Use the tab in the navbar to search by skills, location, experience, role; set filters and click Search.\n"
+        "• **Records** - In the admin top bar, go to **Records** to view all candidate records.\n"
+        "• **Add New Resume** - Tab in the navbar; upload PDF or DOCX resumes there.\n"
+        "• **Employee List** - Tab in the navbar to upload or replace the company employee CSV.\n"
+        "• **Users** (Admin only) - Manage platform users from the admin area.\n\n"
         "You can access these from the top navbar. Go there to find what you need."
     ),
 }
@@ -238,7 +238,7 @@ async def handle_search_skills(db: AsyncSession, extras: dict) -> tuple[str, dic
     for i, r in enumerate(formatted[:15], 1):
         name = (r.get("candidate_name") or r.get("parsed_data", {}).get("resume_candidate_name") or "Unknown").strip()
         sks = r.get("skills") or []
-        sks_str = ", ".join(sks[:8]) if sks else "—"
+        sks_str = ", ".join(sks[:8]) if sks else "-"
         lines.append(f"{i}) {name} (skills: {sks_str})")
     reply = f"Found **{len(formatted)}** people with {skill_str}:\n" + "\n".join(lines)
     if len(formatted) > 15:
@@ -340,7 +340,7 @@ async def handle_ready_to_relocate(db: AsyncSession) -> tuple[str, dict | None]:
     lines = []
     for i, r in enumerate(formatted[:15], 1):
         name = (r.get("name") or r.get("candidate_name") or (r.get("parsed_data") or {}).get("resume_candidate_name") or "Unknown").strip()
-        loc = (r.get("preferred_location") or "").strip() or "—"
+        loc = (r.get("preferred_location") or "").strip() or "-"
         lines.append(f"{i}) {name} (preferred location: {loc})")
     reply = f"There are **{len(ready)}** people open to relocate:\n" + "\n".join(lines)
     if len(ready) > 15:
@@ -380,7 +380,7 @@ async def handle_search_by_role(db: AsyncSession, extras: dict) -> tuple[str, di
     matched = [r for r in all_f if role_kw in ((r.get("role") or "").lower())]
     if not matched:
         return f"No candidates found with role containing \"{role_kw}\". Try **Search Talent** or **Records** and filter by Role.", None
-    lines = [f"{i}) {r.get('name', 'Unknown')} ({r.get('role', '—')})" for i, r in enumerate(matched[:15], 1)]
+    lines = [f"{i}) {r.get('name', 'Unknown')} ({r.get('role', '-')})" for i, r in enumerate(matched[:15], 1)]
     reply = f"Found **{len(matched)}** candidates with role matching \"{role_kw}\":\n" + "\n".join(lines)
     if len(matched) > 15:
         reply += f"\n... and {len(matched) - 15} more. See **Records** for full list."
@@ -401,7 +401,7 @@ async def handle_search_by_location(db: AsyncSession, extras: dict) -> tuple[str
     matched = [r for r in all_f if loc_kw in ((r.get("location") or "").lower()) or loc_kw in ((r.get("preferred_location") or "").lower())]
     if not matched:
         return f"No candidates found in \"{loc_kw}\". Try **Search Talent** (Location filter) or **Records**.", None
-    lines = [f"{i}) {r.get('name', 'Unknown')} ({r.get('location') or r.get('preferred_location') or '—'})" for i, r in enumerate(matched[:15], 1)]
+    lines = [f"{i}) {r.get('name', 'Unknown')} ({r.get('location') or r.get('preferred_location') or '-'})" for i, r in enumerate(matched[:15], 1)]
     reply = f"Found **{len(matched)}** candidates in/for \"{loc_kw}\":\n" + "\n".join(lines)
     if len(matched) > 15:
         reply += f"\n... and {len(matched) - 15} more. See **Records**."
@@ -475,7 +475,7 @@ async def handle_search_by_type(db: AsyncSession, extras: dict) -> tuple[str, di
     matched = [r for r in all_f if (r.get("user_type") or "").lower() == norm.lower()]
     if not matched:
         return f"No candidates found with type \"{norm}\". Check **Records** (Type column).", None
-    lines = [f"{i}) {r.get('name', 'Unknown')} ({r.get('user_type', '—')})" for i, r in enumerate(matched[:15], 1)]
+    lines = [f"{i}) {r.get('name', 'Unknown')} ({r.get('user_type', '-')})" for i, r in enumerate(matched[:15], 1)]
     reply = f"Found **{len(matched)}** candidates of type **{norm}**:\n" + "\n".join(lines)
     if len(matched) > 15:
         reply += f"\n... and {len(matched) - 15} more. See **Records**."
@@ -516,7 +516,7 @@ async def handle_employee_list_who(db: AsyncSession) -> tuple[str, dict | None]:
     rows = result.scalars().all()
     if not rows:
         return "The employee list is empty. Upload a CSV in the **Employee List** tab (columns: employee_id, full_name, email).", None
-    lines = [f"{i}) {r.full_name or '—'} ({r.email})" for i, r in enumerate(rows[:25], 1)]
+    lines = [f"{i}) {r.full_name or '-'} ({r.email})" for i, r in enumerate(rows[:25], 1)]
     reply = f"There are **{len(rows)}** employees in the list (showing up to 25):\n" + "\n".join(lines)
     if len(rows) >= 100:
         reply += "\n... and more. Open **Employee List** tab to see all."
@@ -544,7 +544,7 @@ async def handle_employee_list_lookup(db: AsyncSession, extras: dict) -> tuple[s
     if len(rows) == 1:
         r = rows[0]
         return f"Yes, **{r.full_name or r.email}** is in the employee list (employee_id: {r.employee_id}, email: {r.email}).", None
-    lines = [f"• {r.full_name or '—'} ({r.email}, id: {r.employee_id})" for r in rows[:5]]
+    lines = [f"• {r.full_name or '-'} ({r.email}, id: {r.employee_id})" for r in rows[:5]]
     return f"Found **{len(rows)}** matches for \"{lookup}\":\n" + "\n".join(lines), None
 
 

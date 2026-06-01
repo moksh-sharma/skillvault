@@ -662,7 +662,7 @@ async def analyze_jd_v2(
         ]
         dim_labels = {d.id: d.label for d in dims}
 
-        # LLM step (Ollama) – fall back to heuristic extraction if unavailable
+        # LLM step (Ollama) - fall back to heuristic extraction if unavailable
         try:
             jd_struct = await openai_service.extract_jd_structure_v2(jd_text, dim_lib_payload)
         except Exception as e:
@@ -898,7 +898,7 @@ async def analyze_jd_v2(
                 f"(no cache match for structure_hash={jd_structure_hash[:8]}...)"
             )
 
-            # LLM step (Ollama) – fall back to heuristic evidence if unavailable
+            # LLM step (Ollama) - fall back to heuristic evidence if unavailable
             try:
                 async with semaphore:
                     evidence = await openai_service.extract_resume_evidence_v2(detached, jd_struct)

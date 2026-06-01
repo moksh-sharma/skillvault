@@ -1,15 +1,17 @@
+import json
 import secrets
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, delete
+from sqlalchemy import select, func, delete, or_
 from datetime import datetime, timedelta
 from pydantic import BaseModel, EmailStr
 from src.models.resume import Resume, Education
 from src.models.jd_analysis import JDAnalysis, MatchResult
 from src.models.user_db import User
-from src.models.employee_list import CompanyEmployeeList
+from src.models.employee_list import CompanyEmployeeList, AppConfig
 from src.models.job_application import JobApplication
+from src.models.job_opening import JobOpening
 from src.config.database import get_postgres_db
 from src.config.settings import settings
 from src.middleware.auth_middleware import get_admin_user, create_invite_token
@@ -131,10 +133,10 @@ async def get_dashboard_stats(
         # Notice period buckets for windrose (days): Immediate, 0-15, 15-30, 30-60, 60-90, 90+
         notice_period_buckets = {
             'Immediate (0d)': 0,
-            '1–15 days': 0,
-            '16–30 days': 0,
-            '31–60 days': 0,
-            '61–90 days': 0,
+            '1-15 days': 0,
+            '16-30 days': 0,
+            '31-60 days': 0,
+            '61-90 days': 0,
             '90+ days': 0,
         }
         # Relocation: ready_to_relocate true vs false (same sources as format_resume_response)
@@ -290,13 +292,13 @@ async def get_dashboard_stats(
             if notice_days <= 0:
                 notice_period_buckets['Immediate (0d)'] += 1
             elif notice_days <= 15:
-                notice_period_buckets['1–15 days'] += 1
+                notice_period_buckets['1-15 days'] += 1
             elif notice_days <= 30:
-                notice_period_buckets['16–30 days'] += 1
+                notice_period_buckets['16-30 days'] += 1
             elif notice_days <= 60:
-                notice_period_buckets['31–60 days'] += 1
+                notice_period_buckets['31-60 days'] += 1
             elif notice_days <= 90:
-                notice_period_buckets['61–90 days'] += 1
+                notice_period_buckets['61-90 days'] += 1
             else:
                 notice_period_buckets['90+ days'] += 1
 
@@ -401,62 +403,93 @@ async def get_dashboard_stats(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+def _parse_notification_timestamp(value):
+    """Parse ISO timestamp for sorting; returns datetime.min on failure."""
+    if not value:
+        return datetime.min
+    try:
+        dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if dt.tzinfo is not None:
+            dt = dt.replace(tzinfo=None)
+        return dt
+    except (ValueError, TypeError):
+        return datetime.min
+
+
+def _resume_source_label(st):
+    if not st:
+        return "Upload"
+    st = (st or "").lower()
+    if st == "guest":
+        return "Careers / Guest"
+    if st == "gmail":
+        return "Gmail"
+    if st == "outlook":
+        return "Outlook"
+    if st == "company_employee":
+        return "Employee portal"
+    if st == "admin":
+        return "Admin upload"
+    if st == "freelancer":
+        return "Freelancer"
+    return st.replace("_", " ").title()
+
+
 @router.get("/notifications")
 async def get_admin_notifications(
     limit: int = Query(50, ge=1, le=100),
-    days: int = Query(7, ge=1, le=30),
+    days: int = Query(14, ge=1, le=30),
     current_user: dict = Depends(get_admin_user),
     db: AsyncSession = Depends(get_postgres_db)
 ):
-    """Recent activity: resume uploads (job apps, Outlook/Gmail, employee, admin), user logins, and time-based reminders."""
+    """Recent platform activity for the admin notification panel."""
     try:
         since = datetime.utcnow() - timedelta(days=days)
+        now = datetime.utcnow()
         notifications = []
+        cap = limit * 2  # gather extra before sort/limit
 
-        # 1) Recent resume uploads (job applications, Gmail/Outlook, employee, admin, etc.)
+        # 1) Resume uploads (careers, Gmail/Outlook fetch, employee/freelancer/guest, admin bulk)
         resume_query = (
             select(Resume.id, Resume.uploaded_at, Resume.source_type, Resume.filename)
             .where(Resume.uploaded_at >= since)
             .order_by(Resume.uploaded_at.desc())
-            .limit(limit)
+            .limit(cap)
         )
         res = await db.execute(resume_query)
         rows = res.all()
         resume_ids = [r[0] for r in rows]
-        job_title_by_resume = {}
+        job_meta_by_resume = {}
         if resume_ids:
             ja_res = await db.execute(
-                select(JobApplication.resume_id, JobApplication.job_title).where(JobApplication.resume_id.in_(resume_ids))
+                select(
+                    JobApplication.resume_id,
+                    JobApplication.job_title,
+                    JobApplication.applicant_name,
+                ).where(JobApplication.resume_id.in_(resume_ids))
             )
-            job_title_by_resume = {r[0]: r[1] for r in ja_res.all()}
-
-        def source_label(st):
-            if not st:
-                return "Upload"
-            st = (st or "").lower()
-            if st == "guest":
-                return "Career / Guest"
-            if st == "gmail":
-                return "Gmail / Email"
-            if st == "outlook":
-                return "Outlook"
-            if st == "company_employee":
-                return "Employee"
-            if st == "admin":
-                return "Admin upload"
-            if st == "freelancer":
-                return "Freelancer"
-            return st.replace("_", " ").title()
+            for ja in ja_res.all():
+                job_meta_by_resume[ja[0]] = {"job_title": ja[1], "applicant_name": ja[2]}
 
         for r in rows:
             rid, uploaded_at, source_type, filename = r[0], r[1], r[2], r[3]
-            job_title = job_title_by_resume.get(rid)
+            label = _resume_source_label(source_type)
+            meta = job_meta_by_resume.get(rid) or {}
+            job_title = meta.get("job_title")
+            applicant = (meta.get("applicant_name") or "").strip()
+            file_part = f" ({filename})" if filename else ""
+
             if job_title:
-                message = f"New application for «{job_title}»"
+                who = f" from {applicant}" if applicant else ""
+                message = f"New job application: {job_title}{who}{file_part}"
                 ntype = "job_application"
+            elif (source_type or "").lower() in ("gmail", "outlook"):
+                message = f"Resume fetched from {label}{file_part}"
+                ntype = "email_fetch"
             else:
-                message = f"New resume uploaded ({source_label(source_type)})"
+                message = f"New resume added via {label}{file_part}"
                 ntype = "resume_upload"
+
             notifications.append({
                 "id": f"resume-{rid}",
                 "type": ntype,
@@ -468,51 +501,132 @@ async def get_admin_notifications(
                 "filename": filename,
             })
 
-        # 2) Recent user logins (credentials or Google) – real time
-        login_query = (
+        # 2) Job openings created / updated
+        jobs_res = await db.execute(
+            select(JobOpening.job_id, JobOpening.title, JobOpening.status, JobOpening.created_at, JobOpening.updated_at)
+            .where(or_(JobOpening.created_at >= since, JobOpening.updated_at >= since))
+            .order_by(JobOpening.updated_at.desc())
+            .limit(cap)
+        )
+        for job in jobs_res.all():
+            jid, title, status, created_at, updated_at = job
+            created_at = created_at or updated_at
+            updated_at = updated_at or created_at
+            is_update = (
+                created_at
+                and updated_at
+                and (updated_at - created_at).total_seconds() > 120
+                and updated_at >= since
+            )
+            if is_update:
+                notifications.append({
+                    "id": f"job-updated-{jid}-{updated_at.timestamp() if updated_at else 0}",
+                    "type": "job_updated",
+                    "message": f"Job opening updated: {title} ({status or 'active'})",
+                    "timestamp": updated_at.isoformat() if updated_at else None,
+                    "job_id": jid,
+                })
+            elif created_at and created_at >= since:
+                notifications.append({
+                    "id": f"job-created-{jid}",
+                    "type": "job_created",
+                    "message": f"New job opening published: {title}",
+                    "timestamp": created_at.isoformat(),
+                    "job_id": jid,
+                })
+
+        # 3) JD analyses (Search Using JD)
+        jd_res = await db.execute(
+            select(JDAnalysis.job_id, JDAnalysis.jd_filename, JDAnalysis.submitted_at, JDAnalysis.submitted_by)
+            .where(JDAnalysis.submitted_at >= since)
+            .order_by(JDAnalysis.submitted_at.desc())
+            .limit(cap)
+        )
+        for jd in jd_res.all():
+            jid, jd_filename, submitted_at, submitted_by = jd
+            file_part = f" ({jd_filename})" if jd_filename else ""
+            by_part = f" by {submitted_by}" if submitted_by else ""
+            notifications.append({
+                "id": f"jd-{jid}",
+                "type": "jd_analysis",
+                "message": f"JD talent search completed{file_part}{by_part}",
+                "timestamp": submitted_at.isoformat() if submitted_at else None,
+                "job_id": jid,
+            })
+
+        # 4) Employee roster CSV/Excel upload
+        upload_cfg = await db.execute(
+            select(AppConfig.value).where(AppConfig.key == "employee_list_last_upload")
+        )
+        upload_raw = upload_cfg.scalar_one_or_none()
+        if upload_raw:
+            try:
+                upload_meta = json.loads(upload_raw)
+                upload_at = _parse_notification_timestamp(upload_meta.get("at"))
+                if upload_at >= since:
+                    count = upload_meta.get("count", 0)
+                    notifications.append({
+                        "id": f"employee-list-{upload_meta.get('at')}",
+                        "type": "employee_list",
+                        "message": f"Employee list updated ({count} employees in roster)",
+                        "timestamp": upload_meta.get("at"),
+                    })
+            except (json.JSONDecodeError, TypeError):
+                pass
+
+        # 5) New users & admin invites
+        users_res = await db.execute(
+            select(User.id, User.name, User.email, User.mode, User.employment_type, User.created_at, User.last_login_at)
+            .where(User.created_at >= since)
+            .order_by(User.created_at.desc())
+            .limit(cap)
+        )
+        for u in users_res.all():
+            uid, name, email, mode, employment_type, created_at, last_login_at = u
+            display = (name or email or "User").strip() or "User"
+            if (mode or "").lower() == "admin" and not last_login_at:
+                notifications.append({
+                    "id": f"invite-{uid}",
+                    "type": "admin_invite",
+                    "message": f"Admin portal invite sent: {email}",
+                    "timestamp": created_at.isoformat() if created_at else None,
+                    "user_id": uid,
+                    "email": email,
+                })
+            else:
+                et = employment_type or "User"
+                notifications.append({
+                    "id": f"signup-{uid}",
+                    "type": "user_registered",
+                    "message": f"New user registered: {display} ({et})",
+                    "timestamp": created_at.isoformat() if created_at else None,
+                    "user_id": uid,
+                    "email": email,
+                })
+
+        # 6) User logins
+        login_res = await db.execute(
             select(User.id, User.name, User.email, User.last_login_at)
             .where(User.last_login_at >= since)
             .order_by(User.last_login_at.desc())
-            .limit(limit)
+            .limit(cap)
         )
-        login_res = await db.execute(login_query)
         for u in login_res.all():
-            uid, name, email, last_login_at = u[0], u[1], u[2], u[3]
+            uid, name, email, last_login_at = u
             if not last_login_at:
                 continue
             display = (name or email or "User").strip() or "User"
             notifications.append({
                 "id": f"login-{uid}-{last_login_at.timestamp()}",
                 "type": "login",
-                "message": f"User logged in: {display}",
+                "message": f"User signed in: {display}",
                 "timestamp": last_login_at.isoformat(),
                 "user_id": uid,
                 "email": email,
             })
 
-        # 3) Self-generated reminder every ~2 hours: prompt to open Records tab
-        now = datetime.utcnow()
-        if now.hour % 2 == 0:
-            notifications.insert(0, {
-                "id": "reminder-records",
-                "type": "reminder",
-                "message": "Reminder: Open the Records tab to see new resumes (open this toggle if you haven’t in 1–2 hours).",
-                "timestamp": now.isoformat(),
-            })
-
-        # Sort all by timestamp desc and cap
-        def ts_key(n):
-            t = n.get("timestamp")
-            if not t:
-                return now
-            try:
-                return datetime.fromisoformat(t.replace("Z", "+00:00"))
-            except (ValueError, TypeError):
-                return now
-        notifications.sort(key=ts_key, reverse=True)
+        notifications.sort(key=lambda n: _parse_notification_timestamp(n.get("timestamp")), reverse=True)
         notifications = notifications[:limit]
-
-        # Badge count = exact number of notifications in the list (so the number is never random)
         unread_count = min(len(notifications), 99)
         return {"notifications": notifications, "unread_count": unread_count}
     except Exception as e:

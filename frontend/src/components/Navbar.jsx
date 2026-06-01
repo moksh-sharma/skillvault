@@ -7,7 +7,18 @@ import { APP_NAME, ADMIN_DASHBOARD_PATH } from '../config/brand'
 import { WOMEN_OWNED_LOGO_SRC, CACHE_LOGO_SRC } from '../config/brandAssets'
 import './Navbar.css'
 
-const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, showLogout = true, adminTabs, activeTab, setActiveTab, centerHeading }) => {
+const Navbar = ({
+  userProfile,
+  showAdminToggle = false,
+  showProfile = true,
+  showLogout = true,
+  adminTabs,
+  activeTab,
+  setActiveTab,
+  centerHeading,
+  onStartGuide,
+  guideHighlightTab,
+}) => {
   const props = { adminTabs, activeTab, setActiveTab }
   const isPortalMode = !!centerHeading // Helper to keep the previous code working without changing 'props.' prefixes everywhere in the previous step instruction context, or I can just fix the usage in previous step. Actually, the Previous Step inserted `props.adminTabs`. So I need `props` to be defined. 
   // BETTER STRATEGY: Update the signature to `const Navbar = (props) => { const { userProfile, showAdminToggle = false, showProfile = true } = props; ...`
@@ -28,7 +39,7 @@ const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, show
     if (!adminTabs) return
     try {
       if (showLoading) setNotificationsLoading(true)
-      const data = await getAdminNotifications({ limit: 30, days: 7 })
+      const data = await getAdminNotifications({ limit: 40, days: 14 })
       setNotifications(data.notifications || [])
       setUnreadCount(data.unread_count ?? 0)
     } catch (e) {
@@ -41,13 +52,21 @@ const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, show
 
   useEffect(() => {
     if (!adminTabs) return
+    const refresh = () => fetchNotifications(false)
     fetchNotifications(true)
-    const interval = setInterval(() => fetchNotifications(false), 60000)
-    const onResumeUploaded = () => fetchNotifications(false)
-    window.addEventListener('resumeUploaded', onResumeUploaded)
+    const interval = setInterval(refresh, 30000)
+    const onActivity = () => refresh()
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') refresh()
+    }
+    window.addEventListener('resumeUploaded', onActivity)
+    window.addEventListener('adminActivity', onActivity)
+    document.addEventListener('visibilitychange', onVisible)
     return () => {
       clearInterval(interval)
-      window.removeEventListener('resumeUploaded', onResumeUploaded)
+      window.removeEventListener('resumeUploaded', onActivity)
+      window.removeEventListener('adminActivity', onActivity)
+      document.removeEventListener('visibilitychange', onVisible)
     }
   }, [adminTabs])
 
@@ -125,7 +144,9 @@ const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, show
             {props.adminTabs.map((tab) => (
               <motion.button
                 key={tab.id}
-                className={`nav-glass-tab ${tab.colorClass} ${props.activeTab === tab.id ? 'active' : ''}`}
+                type="button"
+                data-guide-tab={tab.id}
+                className={`nav-glass-tab ${tab.colorClass} ${props.activeTab === tab.id ? 'active' : ''} ${guideHighlightTab === tab.id ? 'guide-highlight-tab' : ''}`}
                 onClick={() => props.setActiveTab(tab.id)}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -134,6 +155,20 @@ const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, show
                 <span className="tab-label">{tab.label}</span>
               </motion.button>
             ))}
+            {onStartGuide && (
+              <motion.button
+                type="button"
+                className="nav-glass-tab nav-guide-tab"
+                data-guide="admin-guide-btn"
+                onClick={onStartGuide}
+                title="How to use SkillVault"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <span className="tab-icon guide-tab-icon">?</span>
+                <span className="tab-label">Guide</span>
+              </motion.button>
+            )}
           </div>
         )}
 
@@ -175,10 +210,17 @@ const Navbar = ({ userProfile, showAdminToggle = false, showProfile = true, show
                     )}
                     {notifications.slice(0, 20).map((n) => (
                       <div key={n.id || n.resume_id} className={`navbar-notification-item navbar-notification-item--${n.type || 'default'}`}>
-                        {n.type === 'reminder' && <span className="navbar-notification-type-tag">Reminder</span>}
                         {n.type === 'login' && <span className="navbar-notification-type-tag navbar-notification-type-tag--login">Login</span>}
                         {n.type === 'job_application' && <span className="navbar-notification-type-tag navbar-notification-type-tag--job">Application</span>}
-                        {n.type === 'resume_upload' && <span className="navbar-notification-type-tag navbar-notification-type-tag--resume">Resume</span>}
+                        {(n.type === 'resume_upload' || n.type === 'email_fetch') && (
+                          <span className="navbar-notification-type-tag navbar-notification-type-tag--resume">Resume</span>
+                        )}
+                        {n.type === 'job_created' && <span className="navbar-notification-type-tag navbar-notification-type-tag--job-created">New job</span>}
+                        {n.type === 'job_updated' && <span className="navbar-notification-type-tag navbar-notification-type-tag--job-updated">Job update</span>}
+                        {n.type === 'jd_analysis' && <span className="navbar-notification-type-tag navbar-notification-type-tag--jd">JD search</span>}
+                        {n.type === 'employee_list' && <span className="navbar-notification-type-tag navbar-notification-type-tag--employees">Roster</span>}
+                        {n.type === 'admin_invite' && <span className="navbar-notification-type-tag navbar-notification-type-tag--invite">Invite</span>}
+                        {n.type === 'user_registered' && <span className="navbar-notification-type-tag navbar-notification-type-tag--signup">Signup</span>}
                         <div className="navbar-notification-message">{n.message}</div>
                         <div className="navbar-notification-time">
                           {n.timestamp ? new Date(n.timestamp).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' }) : ''}

@@ -1,4 +1,4 @@
-# Portal Resumes – Database IDs and Dashboard Count
+# Portal Resumes - Database IDs and Dashboard Count
 
 ## Which database and table?
 

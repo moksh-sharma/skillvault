@@ -498,15 +498,15 @@
     -webkit-backdrop-filter: blur(20px);
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.5);
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: auto;
     margin-top: 1rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.4);
     max-height: 650px;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Records: only the container behind the table (not the header) – green like Employee List */
+/* Records: only the container behind the table (not the header) - green like Employee List */
 .records-dashboard .records-table-section {
     background: linear-gradient(135deg,
         rgba(14, 165, 233, 0.2) 0%,
@@ -516,27 +516,183 @@
     border-radius: 16px;
     padding: 1.25rem;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
-/* Records: table container – match inner radius, solid background so corners don’t mix with green */
-.records-dashboard .records-table-section .table-container {
+/* Records: scrollable table wrapper (vertical + horizontal) */
+.records-dashboard .records-table-section .table-container.records-table-scroll {
     border-radius: 12px;
     background: #ffffff;
-    border: 1px solid rgba(14, 165, 233, 0.25);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    margin-top: 0;
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 320px;
+    /* Fixed viewport so tbody scrolls inside the box (like horizontal overflow) */
+    height: min(56vh, 540px);
+    max-height: min(56vh, 540px);
+    overflow: auto;
+    overflow-x: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    scrollbar-gutter: stable;
+}
+
+.records-dashboard .records-data-table {
+    width: 100%;
+    min-width: 1180px;
+    table-layout: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.875rem;
+}
+
+/* Records: sticky header */
+.records-dashboard .records-data-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: #f1f5f9;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 1px 0 #e2e8f0;
+}
+
+.records-dashboard .records-data-table th {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.85rem 1rem;
+    border-bottom: 2px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    white-space: nowrap;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.records-dashboard .records-data-table th:last-child {
+    border-right: none;
+}
+
+.records-dashboard .records-data-table tbody tr {
+    border-bottom: 1px solid #e2e8f0;
+    transition: background-color 0.15s ease;
+}
+
+.records-dashboard .records-data-table tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.records-dashboard .records-data-table tbody tr:hover {
+    background: #eff6ff;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
 }
 
-/* Records: table heading row – solid grey */
-.records-dashboard .data-table thead {
-    background: #e5e7eb;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+.records-dashboard .records-data-table td {
+    padding: 0.75rem 1rem;
+    color: #0f172a;
+    vertical-align: middle;
+    border-right: 1px solid #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.records-dashboard .data-table th {
-    background: #e5e7eb;
+.records-dashboard .records-data-table td:last-child {
+    border-right: none;
+    min-width: 96px;
+    max-width: 140px;
+}
+
+.records-dashboard .records-data-table td:nth-child(2) {
+    min-width: 180px;
+    max-width: 240px;
+}
+
+.records-dashboard .records-data-table td:nth-child(9),
+.records-dashboard .records-data-table td:nth-child(10),
+.records-dashboard .records-data-table td:nth-child(11) {
+    white-space: normal;
+    overflow: visible;
+    max-width: 160px;
+}
+
+.records-dashboard .records-data-table .links-cell {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.records-dashboard .records-data-table .link-icon-btn {
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.records-dashboard .records-data-table .na-text {
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.records-dashboard .records-data-table .id-badge {
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
+    color: #0369a1;
+    backdrop-filter: none;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+}
+
+.records-dashboard .records-data-table .avatar-sm {
+    background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.25);
+}
+
+.records-dashboard .records-data-table .type-badge-new {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    backdrop-filter: none;
+    font-size: 0.65rem;
+}
+
+.records-dashboard .records-data-table .exp-badge-new {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+    backdrop-filter: none;
+}
+
+.records-dashboard .records-data-table .relocate-pill.yes {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.records-dashboard .records-data-table .relocate-pill.no {
+    background: #f1f5f9;
+    color: #64748b;
 }
 
 .data-table {

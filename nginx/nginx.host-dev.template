@@ -1,4 +1,4 @@
-# TechBank.ai — reverse proxy for local dev (no :3005 in the browser URL)
+# TechBank.ai - reverse proxy for local dev (no :3005 in the browser URL)
 # Placeholders __FRONTEND_UPSTREAM__ and __BACKEND_UPSTREAM__ are replaced at container start.
 # Default: frontend Vite on host:3005, FastAPI on host:8000 (override via docker-compose env).
 
@@ -110,7 +110,7 @@ http {
             proxy_set_header Connection $connection_upgrade;
         }
 
-        # FastAPI (must match how app mounts routes — /api/ prefix)
+        # FastAPI (must match how app mounts routes - /api/ prefix)
         location /api/ {
             proxy_pass http://api_dev/api/;
             proxy_set_header Host $host;

@@ -5,6 +5,27 @@ import { useApp } from '../context/AppContext'
 import { uploadResumeWithProfile, parseResumeOnly } from '../config/api'
 import Navbar from '../components/Navbar'
 import './Application.css'
+import { normalizeDashes } from '../utils/normalizeDashes'
+
+/** Coerce parse API values (string, number, or nested { email }) for safe autofill. */
+const asTrimmedString = (value) => {
+  if (value == null) return ''
+  if (typeof value === 'string') return normalizeDashes(value).trim()
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value).trim()
+  if (typeof value === 'object') {
+    if (typeof value.email === 'string') return value.email.trim()
+    const first = Object.values(value).find((v) => typeof v === 'string' && v.trim())
+    return first ? first.trim() : ''
+  }
+  return String(value).trim()
+}
+
+const hasAutofillValue = (value, { disallow = [] } = {}) => {
+  const s = asTrimmedString(value)
+  if (!s) return false
+  if (disallow.includes(s)) return false
+  return true
+}
 
 const Application = () => {
   const navigate = useNavigate()
@@ -146,70 +167,71 @@ const Application = () => {
         // Auto-fill form fields - ONLY if data exists
         const updates = {}
         
-        if (parsed.firstName && parsed.firstName.trim()) {
-          updates.firstName = parsed.firstName
+        if (hasAutofillValue(parsed.firstName)) {
+          updates.firstName = asTrimmedString(parsed.firstName)
           filledFields.add('firstName')
         }
         
-        if (parsed.lastName && parsed.lastName.trim()) {
-          updates.lastName = parsed.lastName
+        if (hasAutofillValue(parsed.lastName)) {
+          updates.lastName = asTrimmedString(parsed.lastName)
           filledFields.add('lastName')
         }
         
-        if (parsed.email && parsed.email.trim() && parsed.email !== "Not mentioned") {
-          updates.email = parsed.email
+        if (hasAutofillValue(parsed.email, { disallow: ['Not mentioned'] })) {
+          updates.email = asTrimmedString(parsed.email)
           filledFields.add('email')
         }
         
-        if (parsed.phone && parsed.phone.trim()) {
-          updates.phone = parsed.phone
+        if (hasAutofillValue(parsed.phone)) {
+          updates.phone = asTrimmedString(parsed.phone)
           filledFields.add('phone')
         }
         
-        if (parsed.city && parsed.city.trim()) {
-          updates.city = parsed.city
+        if (hasAutofillValue(parsed.city)) {
+          updates.city = asTrimmedString(parsed.city)
           filledFields.add('city')
         }
         
-        if (parsed.country && parsed.country.trim()) {
-          updates.country = parsed.country
+        if (hasAutofillValue(parsed.country)) {
+          updates.country = asTrimmedString(parsed.country)
           filledFields.add('country')
         }
         
-        if (parsed.address && parsed.address.trim()) {
-          updates.address = parsed.address
+        if (hasAutofillValue(parsed.address)) {
+          updates.address = asTrimmedString(parsed.address)
           filledFields.add('address')
         }
         
-        if (parsed.zipCode && parsed.zipCode.trim()) {
-          updates.zipCode = parsed.zipCode
+        if (hasAutofillValue(parsed.zipCode)) {
+          updates.zipCode = asTrimmedString(parsed.zipCode)
           filledFields.add('zipCode')
         }
         
-        if (parsed.currentCompany && parsed.currentCompany.trim()) {
-          updates.currentCompany = parsed.currentCompany
+        if (hasAutofillValue(parsed.currentCompany)) {
+          updates.currentCompany = asTrimmedString(parsed.currentCompany)
           filledFields.add('currentCompany')
         }
         
-        if (parsed.role && parsed.role.trim() && parsed.role !== "Not mentioned") {
-          updates.role = parsed.role
+        if (hasAutofillValue(parsed.role, { disallow: ['Not mentioned'] })) {
+          updates.role = asTrimmedString(parsed.role)
           filledFields.add('role')
         }
         
-        if (parsed.experience && parsed.experience.trim() && parsed.experience !== '0') {
-          updates.experience = parsed.experience
+        const experienceStr = asTrimmedString(parsed.experience)
+        if (experienceStr && experienceStr !== '0') {
+          updates.experience = experienceStr
           filledFields.add('experience')
         }
         
-        if (parsed.skills && parsed.skills.trim()) {
-          updates.skills = parsed.skills
+        if (hasAutofillValue(parsed.skills)) {
+          updates.skills = asTrimmedString(parsed.skills)
           filledFields.add('skills')
         }
         
-        if (parsed.education && parsed.education.trim()) {
+        if (hasAutofillValue(parsed.education)) {
           // Convert single education string to array format
           updates.education = [{
-            degree: parsed.education.trim(),
+            degree: asTrimmedString(parsed.education),
             institution: 'Detected',
             field_of_study: '',
             start_date: '',
@@ -1142,7 +1164,7 @@ const Application = () => {
             )}
           </motion.div>
 
-          {/* LinkedIn & Portfolio – shown for all portals (Guest, Freelancer, Employee) so links are stored */}
+          {/* LinkedIn & Portfolio - shown for all portals (Guest, Freelancer, Employee) so links are stored */}
           <motion.div
             className="form-section"
             initial={{ opacity: 0, x: -20 }}

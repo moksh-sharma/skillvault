@@ -1,6 +1,8 @@
 // API Configuration and Integration
 // ===========================================
 
+import { normalizeDashesDeep } from '../utils/normalizeDashes.js'
+
 // Base API URL
 // In Vite, use import.meta.env instead of process.env
 const getBackendURL = () => {
@@ -603,7 +605,7 @@ export const parseResumeOnly = async (file) => {
       throw error
     }
 
-    return data
+    return normalizeDashesDeep(data)
   } catch (error) {
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
       throw new Error('Network error: Could not connect to server. Please check if backend is running.')

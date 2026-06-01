@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getPlatformAdminUsers, deletePlatformUser, getEmployeeList, sendAdminInvite } from '../../config/api'
+import { emitAdminActivity } from '../../utils/adminActivity'
 import './AdminUsers.css'
 
 const INVITE_ROLES = ['Admin', 'Talent Acquisition', 'HR']
@@ -120,6 +121,7 @@ const AdminUsers = () => {
       setInviteEmail('')
       setInviteModalOpen(false)
       fetchUsers()
+      emitAdminActivity({ type: 'admin_invite', email: payload.email })
     } catch (err) {
       setInviteMessage({ type: 'error', text: err.message || err.detail || 'Failed to send invite' })
     } finally {
@@ -156,7 +158,6 @@ const AdminUsers = () => {
 
       <div className="invite-user-section">
         <h3 className="invite-user-heading">Invite to Admin Portal</h3>
-        <p className="invite-user-hint">Select a company employee and role. They will receive an email with a temporary password and a link to set their password.</p>
         <form onSubmit={handleOpenInviteModal} className="invite-user-form">
           <div className="invite-user-row">
             <label htmlFor="invite-employee">Employee (email)</label>
@@ -174,7 +175,7 @@ const AdminUsers = () => {
                 const hasAccess = hasAccessEmails.has(emailLower)
                 return (
                   <option key={emp.email} value={emp.email} disabled={invited}>
-                    {emp.full_name || emp.email} ({emp.email}){invited ? (hasAccess ? ' — already has access' : ' — invite sent') : ''}
+                    {emp.full_name || emp.email} ({emp.email}){invited ? (hasAccess ? ' - already has access' : ' - invite sent') : ''}
                   </option>
                 )
               })}
@@ -267,7 +268,7 @@ const AdminUsers = () => {
                 <tr key={u.id}>
                   <td className="platform-admin-name">{u.name}</td>
                   <td className="platform-admin-email">{u.email}</td>
-                  <td className="platform-admin-id">{u.employee_id || '—'}</td>
+                  <td className="platform-admin-id">{u.employee_id || '-'}</td>
                   <td className="platform-admin-role">{formatRole(u.mode)}</td>
                   <td className={`platform-admin-status ${u.has_logged_in ? 'status-logged-in' : 'status-invite-sent'}`}>
                     {u.has_logged_in ? 'User logged in' : 'Invite sent'}
@@ -275,7 +276,7 @@ const AdminUsers = () => {
                   <td className="platform-admin-actions">
                     {(u.mode || '').toLowerCase() === 'admin' ? (
                       <span className="platform-admin-no-remove" title="Admin users cannot be removed">
-                        —
+                        -
                       </span>
                     ) : (
                       <button

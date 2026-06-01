@@ -125,7 +125,7 @@ const SearchTalent = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <h3>🔍 Filter Candidates</h3>
+        <h3>Filter Candidates</h3>
 
         <div className="filters-grid">
           <div className="filter-group">
@@ -233,7 +233,7 @@ const SearchTalent = () => {
 
         <div className="filter-actions">
           <button className="search-btn" onClick={handleSearch} disabled={loading}>
-            {loading ? 'Searching...' : '🔍 Search Candidates'}
+            {loading ? 'Searching...' : 'Search Candidates'}
           </button>
           <button className="clear-btn" onClick={handleClear} disabled={loading}>
             Clear Filters
@@ -376,7 +376,7 @@ const SearchTalent = () => {
         </div>
       </motion.div>
 
-      {/* Full skills popup – rendered in viewport center via portal */}
+      {/* Full skills popup - rendered in viewport center via portal */}
       {skillsModalResult && createPortal(
         <div
           className="skills-modal-overlay"

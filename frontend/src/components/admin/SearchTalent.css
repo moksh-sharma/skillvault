@@ -510,7 +510,7 @@
   box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
 }
 
-/* "+N more" clickable button – opens full skills popup */
+/* "+N more" clickable button - opens full skills popup */
 .talent-more-count.talent-more-btn {
   display: inline-flex;
   align-items: center;
@@ -533,7 +533,7 @@
   color: #1e40af;
 }
 
-/* Full skills popup – centered in visible viewport (portal to body) */
+/* Full skills popup - centered in visible viewport (portal to body) */
 .skills-modal-overlay {
   position: fixed;
   inset: 0;

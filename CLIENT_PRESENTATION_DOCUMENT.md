@@ -1,4 +1,4 @@
-# TechBank.Ai — Client Presentation Document
+# TechBank.Ai - Client Presentation Document
 
 *Your comprehensive guide for presenting the AI-Powered Talent Screening Platform*
 
@@ -6,7 +6,7 @@
 
 ## 📌 One-Page Executive Summary
 
-**TechBank.Ai** is an AI-powered talent screening and recruitment platform that automates resume screening and candidate matching using GPT-4. It reduces screening time by up to **90%**, cuts time-to-hire by **60–70%**, and finds **30–40% more qualified candidates** than traditional keyword-based ATS systems—all through intelligent semantic understanding and a unified talent pool.
+**TechBank.Ai** is an AI-powered talent screening and recruitment platform that automates resume screening and candidate matching using GPT-4. It reduces screening time by up to **90%**, cuts time-to-hire by **60-70%**, and finds **30-40% more qualified candidates** than traditional keyword-based ATS systems-all through intelligent semantic understanding and a unified talent pool.
 
 ---
 
@@ -14,18 +14,18 @@
 
 ### Elevator Pitch (30 seconds)
 
-> "TechBank.Ai uses GPT-4 to turn hours of manual resume screening into minutes. Upload a job description, and our platform analyzes your entire talent pool, ranks candidates by fit, and explains why each person matches—all with one click. It works with Gmail, Outlook, and direct uploads so every resume lands in one place."
+> "TechBank.Ai uses GPT-4 to turn hours of manual resume screening into minutes. Upload a job description, and our platform analyzes your entire talent pool, ranks candidates by fit, and explains why each person matches-all with one click. It works with Gmail, Outlook, and direct uploads so every resume lands in one place."
 
 ### Full Product Description (2 minutes)
 
 TechBank.Ai is a **comprehensive AI-powered talent management platform** designed for HR teams and recruiters. It acts as an intelligent layer between job requirements and candidate profiles, using GPT-4 to:
 
-- **Parse resumes automatically** — Extract name, contact, skills, experience, education, and certifications from PDF/DOCX files with high accuracy
-- **Analyze job descriptions** — Understand requirements, required vs. preferred skills, experience levels, and keywords
-- **Match candidates intelligently** — Use a hybrid model (40% skills, 30% experience, 30% AI semantic fit) to rank candidates with 0–100 match scores
-- **Centralize talent** — One database for employees, freelancers, applicants, and guest users
-- **Deliver insights** — Skills distribution, geographic maps, experience trends, and recruitment analytics
-- **Collect resumes from anywhere** — Direct uploads, Gmail, Outlook, Google Drive, and bulk imports
+- **Parse resumes automatically** - Extract name, contact, skills, experience, education, and certifications from PDF/DOCX files with high accuracy
+- **Analyze job descriptions** - Understand requirements, required vs. preferred skills, experience levels, and keywords
+- **Match candidates intelligently** - Use a hybrid model (40% skills, 30% experience, 30% AI semantic fit) to rank candidates with 0-100 match scores
+- **Centralize talent** - One database for employees, freelancers, applicants, and guest users
+- **Deliver insights** - Skills distribution, geographic maps, experience trends, and recruitment analytics
+- **Collect resumes from anywhere** - Direct uploads, Gmail, Outlook, Google Drive, and bulk imports
 
 ---
 
@@ -35,11 +35,11 @@ TechBank.Ai is a **comprehensive AI-powered talent management platform** designe
 
 | Feature | Specification | Business Value |
 |--------|----------------|----------------|
-| **AI Resume Parsing** | GPT-4 extracts 15+ fields (name, email, phone, skills, experience, education, certifications, work history) from PDF/DOCX | Saves 2–3 hours per recruiter per day |
+| **AI Resume Parsing** | GPT-4 extracts 15+ fields (name, email, phone, skills, experience, education, certifications, work history) from PDF/DOCX | Saves 2-3 hours per recruiter per day |
 | **JD Analysis** | Extracts required skills, preferred skills, experience, education, keywords; supports file upload or manual text | Ensures accurate job requirement understanding |
-| **Hybrid Matching** | 40% skill overlap + 30% experience match + 30% AI semantic understanding | 30–40% more qualified candidates found |
+| **Hybrid Matching** | 40% skill overlap + 30% experience match + 30% AI semantic understanding | 30-40% more qualified candidates found |
 | **Match Explanations** | Per-candidate breakdown: skill overlap, experience fit, semantic alignment | Informed, defensible hiring decisions |
-| **0–100 Match Score** | Weighted composite score for every candidate | Clear, comparable ranking |
+| **0-100 Match Score** | Weighted composite score for every candidate | Clear, comparable ranking |
 
 ### Talent Management
 
@@ -114,7 +114,7 @@ TechBank.Ai is a **comprehensive AI-powered talent management platform** designe
 | React Router | 6 | Routing |
 | Recharts | 3 | Analytics charts |
 | Framer Motion | 10 | Animations |
-| CSS3 | — | Responsive design |
+| CSS3 | - | Responsive design |
 
 ### Infrastructure
 
@@ -132,16 +132,16 @@ TechBank.Ai is a **comprehensive AI-powered talent management platform** designe
 Unlike keyword-only ATS systems, TechBank.Ai uses GPT-4 to understand context. A candidate with "React" will match roles asking for "JavaScript framework experience" even when the exact keyword is missing.
 
 ### 2. **Hybrid Scoring**
-Combines fast keyword matching with AI analysis: traditional scoring filters first, then AI evaluates top candidates. This keeps speed high and AI costs low (~$0.01–0.05 per JD analysis).
+Combines fast keyword matching with AI analysis: traditional scoring filters first, then AI evaluates top candidates. This keeps speed high and AI costs low (~$0.01-0.05 per JD analysis).
 
 ### 3. **Multi-Channel Resume Collection**
-One platform for direct uploads, Gmail, Outlook, Google Drive, and bulk imports—no more scattered spreadsheets and folders.
+One platform for direct uploads, Gmail, Outlook, Google Drive, and bulk imports-no more scattered spreadsheets and folders.
 
 ### 4. **Explainable Matching**
 Every match includes an explanation (skill overlap, experience fit, semantic fit), so hiring decisions are transparent and defensible.
 
 ### 5. **Unified Talent Pool**
-Internal employees, freelancers, applicants, and hired forces in one system—enabling internal mobility and cross-role matching.
+Internal employees, freelancers, applicants, and hired forces in one system-enabling internal mobility and cross-role matching.
 
 ### 6. **Production-Ready**
 JWT auth, role-based access, validation, background processing, and API documentation out of the box.
@@ -154,13 +154,13 @@ JWT auth, role-based access, validation, background processing, and API document
 
 | # | We have | They typically have | Why it matters |
 |---|---------|----------------------|----------------|
-| **1** | **AI semantic matching** — GPT-4 understands meaning (e.g. "React" matches "JavaScript framework", "ML" matches "machine learning"). | Keyword/search-term matching. Resumes without the exact words get missed. | **30–40% more qualified candidates** found; fewer false negatives. |
-| **2** | **Explainable match scores** — Every candidate gets a 0–100 score **plus** a short explanation (skill overlap, experience fit, semantic fit). | "Match" badges or simple keyword counts; rarely a clear "why." | **Transparent, defensible hiring decisions** for stakeholders. |
-| **3** | **One JD → full talent pool ranked in one shot** — Upload/paste one JD; the system scores and ranks the **entire** (internal + external) talent pool and returns a sorted list. | Job-centric (post job, wait for applicants) or search-centric (you run searches and filter). No "fit this JD against everyone" in one action. | **One action replaces many manual searches**; shortlist in minutes. |
-| **4** | **Unified pool: employees + freelancers + applicants in one place** — One database and one matching engine for company employees, freelancers, guest applicants, and hired forces. | Job boards focus on external applicants; internal employees and freelancers live in other tools or spreadsheets. | **Internal mobility, freelancer matching, and external hiring** from a single system. |
-| **5** | **Automated multi-channel resume ingestion** — Resumes from Gmail, Outlook, Google Drive, and bulk upload are pulled in, parsed by AI, and added to the talent pool without manual copy-paste. | Candidates must apply on the platform or you manually upload; no automatic ingestion from HR inboxes. | **Every resume from email and drives** lands in one place and is searchable/matched like any other profile. |
+| **1** | **AI semantic matching** - GPT-4 understands meaning (e.g. "React" matches "JavaScript framework", "ML" matches "machine learning"). | Keyword/search-term matching. Resumes without the exact words get missed. | **30-40% more qualified candidates** found; fewer false negatives. |
+| **2** | **Explainable match scores** - Every candidate gets a 0-100 score **plus** a short explanation (skill overlap, experience fit, semantic fit). | "Match" badges or simple keyword counts; rarely a clear "why." | **Transparent, defensible hiring decisions** for stakeholders. |
+| **3** | **One JD → full talent pool ranked in one shot** - Upload/paste one JD; the system scores and ranks the **entire** (internal + external) talent pool and returns a sorted list. | Job-centric (post job, wait for applicants) or search-centric (you run searches and filter). No "fit this JD against everyone" in one action. | **One action replaces many manual searches**; shortlist in minutes. |
+| **4** | **Unified pool: employees + freelancers + applicants in one place** - One database and one matching engine for company employees, freelancers, guest applicants, and hired forces. | Job boards focus on external applicants; internal employees and freelancers live in other tools or spreadsheets. | **Internal mobility, freelancer matching, and external hiring** from a single system. |
+| **5** | **Automated multi-channel resume ingestion** - Resumes from Gmail, Outlook, Google Drive, and bulk upload are pulled in, parsed by AI, and added to the talent pool without manual copy-paste. | Candidates must apply on the platform or you manually upload; no automatic ingestion from HR inboxes. | **Every resume from email and drives** lands in one place and is searchable/matched like any other profile. |
 
-**One-line takeaway:** Semantic AI, explainable scores, one-JD-vs-entire-pool ranking, unified internal + external talent, and auto-ingestion from email/drives—all in one platform.
+**One-line takeaway:** Semantic AI, explainable scores, one-JD-vs-entire-pool ranking, unified internal + external talent, and auto-ingestion from email/drives-all in one platform.
 
 ---
 
@@ -171,16 +171,16 @@ JWT auth, role-based access, validation, background processing, and API document
 | Metric | Improvement |
 |--------|-------------|
 | Resume screening time | **90% reduction** (15 hrs → 1.5 hrs) |
-| Time to hire | **60–70% reduction** |
-| Qualified candidates found | **30–40% more** vs. keyword-only |
+| Time to hire | **60-70% reduction** |
+| Qualified candidates found | **30-40% more** vs. keyword-only |
 | Applications processed per recruiter | **~10x** |
-| Hiring cost per candidate | **50–60% reduction** |
+| Hiring cost per candidate | **50-60% reduction** |
 | Evaluation consistency | **100%** standardized scoring |
 
 ### For HR Teams
 
 - 90% less time on manual screening
-- 60–70% faster hiring
+- 60-70% faster hiring
 - Consistent, data-driven evaluation
 - Focus on high-value conversations, not admin
 
@@ -202,7 +202,7 @@ JWT auth, role-based access, validation, background processing, and API document
 
 ## 7. Use Cases (Demo Scenarios)
 
-### Use Case 1: Urgent Hiring — Screen 200+ Applications in Minutes
+### Use Case 1: Urgent Hiring - Screen 200+ Applications in Minutes
 **Scenario:** Fill a Software Engineer role quickly with 200+ applications.
 
 **Flow:**
@@ -262,12 +262,12 @@ JWT auth, role-based access, validation, background processing, and API document
 ## 8. Presentation Flow & Talking Points
 
 ### Slide 1: Title
-**Say:** "Today we're presenting TechBank.Ai—an AI-powered talent screening platform that turns hours of resume screening into minutes."
+**Say:** "Today we're presenting TechBank.Ai-an AI-powered talent screening platform that turns hours of resume screening into minutes."
 
 ### Slide 2: The Problem
-**Say:** "Most HR teams spend 6–8 hours a day screening resumes for a single role. With hundreds of applications, that's overwhelming. Traditional ATS systems rely on keywords and miss qualified candidates who use different terms. Evaluation is inconsistent and data is scattered across emails and spreadsheets."
+**Say:** "Most HR teams spend 6-8 hours a day screening resumes for a single role. With hundreds of applications, that's overwhelming. Traditional ATS systems rely on keywords and miss qualified candidates who use different terms. Evaluation is inconsistent and data is scattered across emails and spreadsheets."
 
-### Slide 3: The Solution — TechBank.Ai
+### Slide 3: The Solution - TechBank.Ai
 **Say:** "TechBank.Ai uses GPT-4 to parse resumes, analyze job descriptions, and match candidates with semantic understanding. It centralizes talent in one place, explains why each candidate fits, and surfaces insights for strategy."
 
 ### Slide 4: How It Works (3 Steps)
@@ -280,7 +280,7 @@ JWT auth, role-based access, validation, background processing, and API document
 **Say:** "Our differentiators: semantic AI that goes beyond keywords, explainable matching so you know why someone fits, multi-channel collection so everything lands in one system, and cost-effective AI usage through smart filtering."
 
 ### Slide 7: Impact Metrics
-**Say:** "Early results: 90% reduction in screening time, 60–70% faster time-to-hire, 30–40% more qualified candidates, and 10x more applications processed per recruiter."
+**Say:** "Early results: 90% reduction in screening time, 60-70% faster time-to-hire, 30-40% more qualified candidates, and 10x more applications processed per recruiter."
 
 ### Slide 8: Demo
 **Say:** "Let me walk you through the platform. [Demo: Login → Admin Dashboard → Search Using JD → Upload JD → Show match results → Show talent search → Show job openings/careers page.]"
@@ -302,7 +302,7 @@ JWT auth, role-based access, validation, background processing, and API document
 | 3 | Show Admin Dashboard | "Here we see users, resumes, JD analyses, matches, and trends at a glance." |
 | 4 | Open Search Using JD | "This is where the magic happens. Upload a JD or paste the text." |
 | 5 | Upload JD file | "We support PDF and DOCX. The system extracts requirements automatically." |
-| 6 | Show analysis results | "See the extracted skills—required and preferred—and the ranked candidates." |
+| 6 | Show analysis results | "See the extracted skills-required and preferred-and the ranked candidates." |
 | 7 | Expand a match | "Each candidate has a score and an explanation: skills, experience, and semantic fit." |
 | 8 | Open Talent Search | "You can also search directly by skills, location, experience, or role." |
 | 9 | Open Manage Job Openings | "Here we create and manage job openings for our careers page." |
@@ -320,7 +320,7 @@ JWT auth, role-based access, validation, background processing, and API document
 **A:** We use JWT authentication, encrypted passwords, role-based access, and configurable data storage. Resumes and PII can be kept on-premise or in your preferred cloud.
 
 **Q: How much does the AI cost per analysis?**  
-**A:** Typical cost is ~$0.01–0.05 per JD analysis for ~100 candidates. We use a hybrid approach so AI is only run on promising candidates to control costs.
+**A:** Typical cost is ~$0.01-0.05 per JD analysis for ~100 candidates. We use a hybrid approach so AI is only run on promising candidates to control costs.
 
 **Q: Can we integrate with our existing ATS?**  
 **A:** Integration with external ATS is on the roadmap. Today we offer a full API and can support custom integrations.
@@ -338,8 +338,8 @@ JWT auth, role-based access, validation, background processing, and API document
 TechBank.Ai is a **production-ready, AI-powered talent screening platform** that:
 
 - Cuts screening time by up to **90%**
-- Speeds up hiring by **60–70%**
-- Surfaces **30–40% more qualified candidates** with explainable matching
+- Speeds up hiring by **60-70%**
+- Surfaces **30-40% more qualified candidates** with explainable matching
 - Centralizes talent from **employees, freelancers, and applicants**
 - Integrates with **Gmail, Outlook, and Google Drive**
 - Delivers **analytics and insights** for data-driven recruitment

@@ -59,7 +59,7 @@ Do this manually:
     }
 }
 
-# This file lives in <repo>/scripts — repo root is one level up
+# This file lives in <repo>/scripts - repo root is one level up
 $root = Split-Path $PSScriptRoot -Parent
 if (-not (Test-Path (Join-Path $root "docker-compose.host-dev.yml"))) {
     Write-Host "Run this from the bank.ai repo (missing docker-compose.host-dev.yml next to scripts/)." -ForegroundColor Red

@@ -23,26 +23,36 @@
   pointer-events: none;
 }
 
-.logo-left,
-.logo-right {
-  height: 60px;
-  width: auto;
+.page-logos .logo-left,
+.page-logos .logo-right {
+  width: 63px;
+  height: 63px;
+  max-width: 63px;
+  max-height: 63px;
+  min-width: 63px;
+  min-height: 63px;
   object-fit: contain;
+  object-position: center;
+  display: block;
   pointer-events: auto;
   transition: transform 0.3s ease;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
-.logo-left:hover,
-.logo-right:hover {
+.page-logos .logo-left:hover,
+.page-logos .logo-right:hover {
   transform: scale(1.05);
 }
 
-.logo-left {
+.page-logos .logo-left {
   margin-right: auto;
 }
 
-.logo-right {
+.page-logos .logo-right {
   margin-left: auto;
+  /* CACHE mark is wider - keep it inside the same 63×63 slot as the left logo */
+  object-position: center;
 }
 
 .login-card {
@@ -113,41 +123,7 @@
   border-bottom: none;
 }
 
-.brand-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--color-text-dark);
-  margin: 0 0 0.15rem 0;
-  letter-spacing: -0.5px;
-}
-
-.brand-tagline {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 0.5rem 0 0 0;
-}
-
-.powered-by-text {
-  font-size: 0.7rem;
-  color: var(--color-text-muted);
-  font-weight: 400;
-  text-transform: lowercase;
-  letter-spacing: 0.5px;
-}
-
-.cache-logo {
-  height: 20px;
-  width: auto;
-  object-fit: contain;
-  opacity: 0.9;
-  transition: opacity 0.3s ease;
-}
-
-.cache-logo:hover {
-  opacity: 1;
-}
+/* .brand-title wordmark styles live in index.css (shared with .navbar-heading) */
 
 .login-form {
   display: flex;
@@ -444,9 +420,14 @@
     padding: 1rem 1rem;
   }
 
-  .logo-left,
-  .logo-right {
-    height: 40px;
+  .page-logos .logo-left,
+  .page-logos .logo-right {
+    width: 48px;
+    height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+    min-width: 48px;
+    min-height: 48px;
   }
 
   .login-card {
@@ -463,7 +444,8 @@
     margin-bottom: 0.75rem;
   }
 
-  .brand-title {
+  .brand-title,
+  .navbar-heading {
     font-size: 1.5rem;
   }
 

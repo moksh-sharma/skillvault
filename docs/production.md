@@ -1,4 +1,4 @@
-# TechBank.ai – Production checklist
+# TechBank.ai - Production checklist
 
 Use this checklist when deploying the Docker stack to production.
 

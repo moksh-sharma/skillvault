@@ -107,7 +107,7 @@
   transition: none;
 }
 
-/* No visual change on hover – same as default */
+/* No visual change on hover - same as default */
 .browse-jd-btn:hover,
 .browse-jd-btn:focus,
 .jd-drop-zone:hover .browse-jd-btn {

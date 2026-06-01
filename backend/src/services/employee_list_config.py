@@ -3,6 +3,7 @@ import csv
 import io
 import json
 import os
+from datetime import datetime
 from typing import Optional, Dict, Any, List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, delete
@@ -16,6 +17,7 @@ logger = get_logger(__name__)
 
 CONFIG_KEY_ENABLED = "employee_verification_enabled"
 CONFIG_KEY_LEFT_AFTER_UPLOAD = "employee_list_left_after_upload"
+CONFIG_KEY_LAST_UPLOAD = "employee_list_last_upload"
 
 
 async def is_employee_list_available(db: AsyncSession) -> bool:
@@ -218,5 +220,13 @@ async def replace_employee_list_from_csv(
             full_name=r.get("full_name"),
             email=r["email"],
         ))
+    upload_at = datetime.utcnow()
+    await db.execute(delete(AppConfig).where(AppConfig.key == CONFIG_KEY_LAST_UPLOAD))
+    db.add(
+        AppConfig(
+            key=CONFIG_KEY_LAST_UPLOAD,
+            value=json.dumps({"at": upload_at.isoformat(), "count": len(new_rows)}),
+        )
+    )
     await db.commit()
     return len(new_rows), removed

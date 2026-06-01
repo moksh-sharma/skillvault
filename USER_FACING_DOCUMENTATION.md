@@ -1,4 +1,4 @@
-## TechBank.Ai — User Guide Overview
+## TechBank.Ai - User Guide Overview
 
 TechBank.Ai is a talent screening and recruitment platform that helps organizations and candidates connect faster. It organizes resumes, understands job needs, and surfaces the best matches so teams can make confident, consistent hiring decisions with less manual work.
 
@@ -12,11 +12,11 @@ TechBank.Ai is a talent screening and recruitment platform that helps organizati
 ## Key Features (Plain Language)
 
 ### For Candidates
-- Easy resume upload with automatic form pre‑fill
+- Easy resume upload with automatic form pre-fill
 - Simple application form with skills, experience, and education
-- Employment‑type selection (company employee, freelancer, guest)
+- Employment-type selection (company employee, freelancer, guest)
 - Profile updates for contact and preference changes
-- Optional relocation and notice‑period details
+- Optional relocation and notice-period details
 
 ### For Admins and Recruiters
 - Central talent pool with searchable candidate records
@@ -24,9 +24,9 @@ TechBank.Ai is a talent screening and recruitment platform that helps organizati
 - Shortlists ranked by fit and explained in plain language
 - Bulk resume uploads to grow the talent pool quickly
 - Dashboard insights on volume, skills, experience, and locations
-- Resume viewing and candidate detail drill‑downs
+- Resume viewing and candidate detail drill-downs
 
-## How It Works (High‑Level)
+## How It Works (High-Level)
 
 1. Candidates submit their resume and details in one flow.
 2. The system extracts key information and builds a structured profile.
@@ -40,7 +40,7 @@ TechBank.Ai is a talent screening and recruitment platform that helps organizati
 - Sign up or log in
 - Choose employment type
 - If required, verify ID
-- Upload resume (auto‑fills the form)
+- Upload resume (auto-fills the form)
 - Review and submit
 - Update profile later if needed
 
@@ -77,5 +77,5 @@ TechBank.Ai is a talent screening and recruitment platform that helps organizati
 
 ---
 
-If you want a shorter one‑page version or a branded brochure layout, I can provide that next.
+If you want a shorter one-page version or a branded brochure layout, I can provide that next.
 

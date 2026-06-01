@@ -1,4 +1,4 @@
-# Convenience wrapper — native nginx reverse proxy on :80 (see nginx/nginx.host-dev-native.conf)
+# Convenience wrapper - native nginx reverse proxy on :80 (see nginx/nginx.host-dev-native.conf)
 param(
     [switch] $Reload,
     [switch] $Stop

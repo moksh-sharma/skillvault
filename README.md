@@ -132,7 +132,7 @@ Frontend runs on: **http://localhost:5173**
 
 ## 🐳 Docker and production
 
-- **Full stack (dev):** `docker compose up --build` — app at http://localhost (see [docker-compose.yml](docker-compose.yml)).
+- **Full stack (dev):** `docker compose up --build` - app at http://localhost (see [docker-compose.yml](docker-compose.yml)).
 - **Production:** See [docs/production.md](docs/production.md) for secrets, HTTPS, backups, and running with `docker-compose.prod.yml`.
 
 ---
