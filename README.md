@@ -134,6 +134,7 @@ Frontend runs on: **http://localhost:5173**
 
 - **Full stack (dev):** `docker compose up --build` - app at http://localhost (see [docker-compose.yml](docker-compose.yml)).
 - **Production:** See [docs/production.md](docs/production.md) for secrets, HTTPS, backups, and running with `docker-compose.prod.yml`.
+- **Shared server (ports 80/443 already in use):** [docs/deployment-server.md](docs/deployment-server.md) — `cp .env.server.example .env`, then `./scripts/deploy-server.sh` (app on **:8080**, project `skillvault`).
 
 ---
 

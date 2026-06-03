@@ -407,6 +407,20 @@ Once both services are running:
 
 ---
 
+## 🖥️ Deploy on shared server (172.16.200.30)
+
+When another app already uses ports **80/443**, use the server compose override (SkillVault on **:8080**):
+
+```bash
+cd bank.ai
+cp .env.server.example .env   # set passwords and FRONTEND_BASE_URL
+./scripts/deploy-server.sh
+```
+
+Full guide: [docs/deployment-server.md](docs/deployment-server.md)
+
+---
+
 ## 📚 Additional Resources
 
 - Backend README: `backend/README.md`

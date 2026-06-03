@@ -1,0 +1,21 @@
+# TechBank.ai / SkillVault — shared-server deploy (does not bind host 80/443)
+#
+# Use when another app already uses ports 80 and 443 on the same machine
+# (e.g. Email Intelligence on 172.16.200.30).
+#
+# Usage (from bank.ai repo root):
+#   cp .env.server.example .env    # edit passwords and URLs
+#   ./scripts/deploy-server.sh
+#
+# Or manually:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.server.yml up -d --build
+#
+# App URL: http://<server-ip>:8080  (HTTPS: https://<server-ip>:8443)
+
+name: skillvault
+
+services:
+  nginx:
+    ports:
+      - "${SKILLVAULT_HTTP_PORT:-8080}:80"
+      - "${SKILLVAULT_HTTPS_PORT:-8443}:443"

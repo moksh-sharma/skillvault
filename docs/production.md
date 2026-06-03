@@ -2,6 +2,8 @@
 
 Use this checklist when deploying the Docker stack to production.
 
+**Shared server (e.g. 172.16.200.30 with another app on :80):** see [deployment-server.md](./deployment-server.md) and use `docker-compose.server.yml` so SkillVault listens on **8080**, not 80/443.
+
 ## Secrets and environment
 
 - Set strong **POSTGRES_PASSWORD**, **JWT_SECRET_KEY**, and **REDIS_PASSWORD** in `.env` (no default values).
