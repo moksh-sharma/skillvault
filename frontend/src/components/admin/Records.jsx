@@ -511,7 +511,7 @@ const CandidateDetailModal = ({ candidate, onClose, onTypeUpdated, onRecordsRefr
                     </div>
                 </div>
 
-                <div className="modal-body">
+                <div className="modal-body" data-lenis-prevent>
                     <div className="modal-grid-container">
                         {onTypeUpdated && getCurrentSourceType(candidate) === 'company_employee' && (
                             <section className="modal-section record-type-edit-section">

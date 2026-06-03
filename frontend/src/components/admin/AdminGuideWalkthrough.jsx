@@ -1,7 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useLenis } from '@studio-freight/react-lenis'
 import './AdminGuideWalkthrough.css'
+
+/** Keep the page at the top during the tour (no scrollIntoView on tall sections). */
+function scrollGuideToTop(lenis) {
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
+  lenis?.scrollTo?.(0, { immediate: true })
+}
 
 const PADDING = 8
 
@@ -69,6 +78,7 @@ const AdminGuideWalkthrough = ({
   const [spotlight, setSpotlight] = useState(null)
   const [tooltipStyle, setTooltipStyle] = useState({ className: 'admin-guide-tooltip--center' })
   const tabSwitchTimer = useRef(null)
+  const lenis = useLenis()
 
   const step = steps[stepIndex]
   const isFirst = stepIndex === 0
@@ -89,10 +99,7 @@ const AdminGuideWalkthrough = ({
     }
 
     const runMeasure = () => {
-      if (step.target || step.pageTarget) {
-        const el = document.querySelector(step.pageTarget || step.target)
-        el?.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' })
-      }
+      scrollGuideToTop(lenis)
       updateLayout()
     }
 
@@ -100,7 +107,11 @@ const AdminGuideWalkthrough = ({
     tabSwitchTimer.current = setTimeout(runMeasure, step.tab ? 320 : 80)
 
     return () => clearTimeout(tabSwitchTimer.current)
-  }, [step, stepIndex, setActiveTab, updateLayout])
+  }, [step, stepIndex, setActiveTab, updateLayout, lenis])
+
+  useEffect(() => {
+    scrollGuideToTop(lenis)
+  }, [lenis])
 
   useEffect(() => {
     const onResize = () => updateLayout()

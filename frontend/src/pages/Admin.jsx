@@ -50,6 +50,9 @@ const Admin = () => {
   const guideHighlightTab = guideActive ? guideSteps[guideStep]?.tab ?? null : null
 
   const startGuide = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
     setGuideStep(0)
     setGuideActive(true)
   }

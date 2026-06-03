@@ -97,9 +97,9 @@ const Navbar = ({
       <div className="navbar-container">
         <div className="navbar-left">
           <img
-            src={WOMEN_OWNED_LOGO_SRC}
-            alt="Women Owned"
-            className="navbar-women-logo"
+            src={CACHE_LOGO_SRC}
+            alt="CACHE"
+            className="navbar-cache-logo"
           />
           {showProfile && (
             <button
@@ -127,7 +127,7 @@ const Navbar = ({
             <h1 className="navbar-center-heading-text">{centerHeading}</h1>
           ) : (
             <motion.h1
-              className="navbar-heading"
+              className="navbar-heading navbar-heading--gradient"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => !isPortalMode && navigate(ADMIN_DASHBOARD_PATH)}
@@ -244,9 +244,9 @@ const Navbar = ({
           )}
 
           <img
-            src={CACHE_LOGO_SRC}
-            alt="CACHE"
-            className="navbar-cache-logo"
+            src={WOMEN_OWNED_LOGO_SRC}
+            alt="Women Owned"
+            className="navbar-women-logo"
           />
         </div>
       </div>

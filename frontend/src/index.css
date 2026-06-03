@@ -18,6 +18,12 @@ html.lenis, html.lenis body {
   -webkit-overflow-scrolling: touch;
 }
 
+.record-detail-modal .modal-body[data-lenis-prevent] {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
 .lenis.lenis-stopped {
   overflow: hidden;
 }

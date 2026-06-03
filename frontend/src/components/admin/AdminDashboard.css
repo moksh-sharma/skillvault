@@ -388,6 +388,37 @@
     border: 1px solid rgba(14, 165, 233, 0.2);
 }
 
+.exp-distribution-header {
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.exp-distribution-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.exp-year-filter-summary {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--chart-muted);
+    letter-spacing: 0.02em;
+}
+
+.exp-year-filter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-shrink: 0;
+}
+
+.exp-year-select {
+    min-width: 140px;
+}
+
 .toggle-btn {
     padding: 8px 20px;
     border: none;
@@ -1249,16 +1280,19 @@
     color: var(--color-text-dark);
     display: flex;
     flex-direction: column;
-    max-height: 90vh;
+    max-height: min(90vh, 100dvh);
     overflow: hidden;
     border-radius: var(--radius-card);
 }
 
 .record-detail-modal .modal-body {
-    flex: 1;
+    flex: 1 1 auto;
     min-height: 0;
+    max-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     background: transparent;
     color: var(--color-text-dark);
 }
@@ -1283,6 +1317,7 @@
 }
 
 .record-detail-modal .modal-header {
+    flex-shrink: 0;
     background: rgba(14, 165, 233, 0.08);
     border-bottom: 1px solid rgba(14, 165, 233, 0.25);
 }
@@ -1339,6 +1374,7 @@
 }
 
 .record-detail-modal .modal-footer-premium {
+    flex-shrink: 0;
     background: rgba(255, 235, 225, 0.2);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);

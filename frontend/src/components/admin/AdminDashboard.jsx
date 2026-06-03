@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 import {
@@ -9,6 +9,12 @@ import {
 } from 'recharts'
 import { API_BASE_URL } from '../../config/api'
 import { emitAdminActivity } from '../../utils/adminActivity'
+import {
+  filterExperienceDistributionByRange,
+  countCandidatesInRange,
+  getExperienceRangeLabel,
+  EXPERIENCE_RANGE_OPTIONS,
+} from '../../utils/experienceDistribution'
 import './AdminDashboard.css'
 
 // Helper to clean text from unwanted characters
@@ -100,6 +106,7 @@ const AdminDashboard = ({ onNavigateToRecords }) => {
   const [error, setError] = useState(null)
   const [selectedCandidate, setSelectedCandidate] = useState(null)
   const [timeframe, setTimeframe] = useState('month') // 'day', 'month', 'quarter'
+  const [expRangeFilter, setExpRangeFilter] = useState('all') // years-of-experience range
   const [selectedState, setSelectedState] = useState('')
   const [syncing, setSyncing] = useState(false)
   const [syncStatus, setSyncStatus] = useState(null)
@@ -115,6 +122,7 @@ const AdminDashboard = ({ onNavigateToRecords }) => {
   ].sort();
 
   useEffect(() => {
+    setExpRangeFilter('all')
     fetchDashboardData(selectedUserType)
 
     // Refresh only when new data arrives (e.g. after resume upload), not on tab/focus
@@ -203,6 +211,18 @@ const AdminDashboard = ({ onNavigateToRecords }) => {
       setLoading(false)
     }
   }
+
+  const experienceDistributionAll = useMemo(() => {
+    return dashboardData?.experienceDistribution || []
+  }, [dashboardData])
+
+  const experienceChartData = useMemo(() => {
+    return filterExperienceDistributionByRange(experienceDistributionAll, expRangeFilter)
+  }, [experienceDistributionAll, expRangeFilter])
+
+  const experienceRangeTotal = useMemo(() => {
+    return countCandidatesInRange(experienceDistributionAll, expRangeFilter)
+  }, [experienceDistributionAll, expRangeFilter])
 
   const handleOutlookSync = async () => {
     try {
@@ -502,12 +522,39 @@ const AdminDashboard = ({ onNavigateToRecords }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <div className="section-header-row">
-            <h3>Experience Distribution</h3>
+          <div className="section-header-row exp-distribution-header">
+            <div className="exp-distribution-title-block">
+              <h3>Experience Distribution</h3>
+              {expRangeFilter !== 'all' && experienceRangeTotal > 0 && (
+                <span className="exp-year-filter-summary">
+                  {experienceRangeTotal} candidate{experienceRangeTotal === 1 ? '' : 's'} with {getExperienceRangeLabel(expRangeFilter).toLowerCase()}
+                </span>
+              )}
+            </div>
+            <div className="exp-year-filter-wrapper">
+              <select
+                id="exp-range-select"
+                className="premium-cyber-select exp-year-select"
+                value={expRangeFilter}
+                onChange={(e) => setExpRangeFilter(e.target.value)}
+                aria-label="Filter chart by years of experience"
+              >
+                {EXPERIENCE_RANGE_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <div className="chart-container" style={{ height: '280px', marginTop: '1.5rem' }}>
+            {experienceChartData.length === 0 ? (
+              <div className="no-data-placeholder">
+                <p>No experience data{expRangeFilter !== 'all' ? ` for ${getExperienceRangeLabel(expRangeFilter)}` : ''}</p>
+              </div>
+            ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={dashboardData.experienceDistribution} margin={{ top: 10, right: 30, left: 10, bottom: 35 }}>
+              <AreaChart key={expRangeFilter} data={experienceChartData} margin={{ top: 10, right: 30, left: 10, bottom: 35 }}>
                 <defs>
                   <linearGradient id="colorExp" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#7FB7B0" stopOpacity={0.35} />
@@ -539,6 +586,11 @@ const AdminDashboard = ({ onNavigateToRecords }) => {
                     if (active && payload && payload.length) {
                       return (
                         <div className="custom-recharts-tooltip">
+                          {expRangeFilter !== 'all' && (
+                            <p style={{ color: '#6B7280', fontSize: '11px', fontWeight: 600, margin: '0 0 6px' }}>
+                              {getExperienceRangeLabel(expRangeFilter)}
+                            </p>
+                          )}
                           <p style={{ color: '#1F2937', fontSize: '12px', fontWeight: 600, margin: 0 }}>{payload[0].payload.exp} Years Exp</p>
                           <p style={{ color: '#7FB7B0', fontSize: '14px', fontWeight: 600, margin: '4px 0 0' }}>Count: {payload[0].value}</p>
                         </div>
@@ -558,6 +610,7 @@ const AdminDashboard = ({ onNavigateToRecords }) => {
                 />
               </AreaChart>
             </ResponsiveContainer>
+            )}
           </div>
         </motion.div>
 

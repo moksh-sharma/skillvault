@@ -766,7 +766,7 @@ const ManageJobOpenings = () => {
                 </div>
               </div>
 
-              <div className="modal-body">
+              <div className="modal-body" data-lenis-prevent>
                 <div className="modal-grid-container">
                   <section className="modal-section">
                     <h3 className="section-title-sm">Application &amp; Quick Contacts</h3>

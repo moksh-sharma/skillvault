@@ -121,14 +121,42 @@ async def get_dashboard_stats(
         # Last 365 days for comprehensive trends
         one_year_ago = datetime.utcnow() - timedelta(days=365)
 
+        def _resume_upload_year(resume) -> int | None:
+            """Calendar year for experience-by-year chart (uploaded_at or meta fallbacks)."""
+            if resume.uploaded_at:
+                return resume.uploaded_at.year
+            meta = resume.meta_data or {}
+            for key in ('uploaded_at', 'created_at', 'upload_date'):
+                raw = meta.get(key)
+                if not raw:
+                    continue
+                try:
+                    if isinstance(raw, datetime):
+                        return raw.year
+                    if isinstance(raw, str):
+                        return datetime.fromisoformat(raw.replace('Z', '+00:00')).year
+                except (TypeError, ValueError):
+                    continue
+            return None
+
         # Initialize user type counts for ALL user types (not just target types)
         user_type_counts = {ut: 0 for ut in target_user_types}
         user_type_skills = {ut: {} for ut in target_user_types}
         if filter_user_type and filter_user_type not in user_type_skills:
             user_type_skills[filter_user_type] = {}
         skill_count = {}
-        experience_counts = {} # Bins: 0, 1, 2, 3...
+        experience_counts = {}  # Bins: 0, 1, 2, 3... (all uploads)
+        experience_counts_by_year = {}  # upload year -> {exp_bin: count}
         state_distribution = {} # Maharashtra, Karnataka, etc.
+
+        def _format_experience_distribution(counts: dict) -> list:
+            if not counts:
+                return []
+            max_exp = max(counts.keys())
+            return sorted(
+                [{'exp': exp, 'count': counts.get(exp, 0)} for exp in range(0, max_exp + 1)],
+                key=lambda x: x['exp'],
+            )
         role_candidates = {} # 'Software Engineer': [{'name': '...', 'exp': ...}, ...]
         # Notice period buckets for windrose (days): Immediate, 0-15, 15-30, 30-60, 60-90, 90+
         notice_period_buckets = {
@@ -209,8 +237,14 @@ async def get_dashboard_stats(
 
             # Populate Experience Distribution
             exp = float(resume.experience_years or 0)
-            exp_bin = int(exp) # Round down to nearest year
+            exp_bin = int(exp)  # Round down to nearest year
             experience_counts[exp_bin] = experience_counts.get(exp_bin, 0) + 1
+            upload_year = _resume_upload_year(resume)
+            if upload_year is not None:
+                if upload_year not in experience_counts_by_year:
+                    experience_counts_by_year[upload_year] = {}
+                year_counts = experience_counts_by_year[upload_year]
+                year_counts[exp_bin] = year_counts.get(exp_bin, 0) + 1
 
             # Populate Trends (only if uploaded_at is not None)
             if resume.uploaded_at and resume.uploaded_at >= one_year_ago:
@@ -363,10 +397,12 @@ async def get_dashboard_stats(
                 ut: [{'skill': skill, 'count': count} for skill, count in skills_list]
                 for ut, skills_list in top_skills_by_user_type.items()
             },
-            'experience_distribution': sorted(
-                [{'exp': exp, 'count': experience_counts.get(exp, 0)} for exp in range(0, (max(experience_counts.keys()) if experience_counts and len(experience_counts) > 0 else 0) + 1)],
-                key=lambda x: x['exp']
-            ) if experience_counts and len(experience_counts) > 0 else [],
+            'experience_distribution': _format_experience_distribution(experience_counts),
+            'experience_distribution_by_year': {
+                str(year): _format_experience_distribution(counts)
+                for year, counts in experience_counts_by_year.items()
+            },
+            'experience_distribution_years': sorted(experience_counts_by_year.keys(), reverse=True),
             'location_distribution': [{'state': s, 'count': c} for s, c in state_distribution.items()],
             'role_distribution': sorted([
                 {
