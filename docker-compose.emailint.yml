@@ -1,0 +1,50 @@
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: skillvault-backend
+
+    env_file:
+      - .env
+
+    ports:
+      - "8002:8000"
+
+    volumes:
+      - skillvault_uploads:/app/uploads
+
+    restart: unless-stopped
+
+    networks:
+      - emailint
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://172.16.200.30:8002/api
+
+    container_name: skillvault-frontend
+
+    ports:
+      - "3005:80"
+
+    restart: unless-stopped
+
+    depends_on:
+      - backend
+
+    networks:
+      - emailint
+
+volumes:
+  skillvault_uploads:
+
+networks:
+  emailint:
+    external: true
+    name: email-intelligence_default

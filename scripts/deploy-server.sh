@@ -26,7 +26,7 @@ fi
 
 if [[ ! -f .env ]]; then
   if [[ -f .env.server.example ]]; then
-    echo "==> Creating .env from .env.server.example — edit secrets before production use."
+    echo "==> Creating .env from .env.server.example - edit secrets before production use."
     cp .env.server.example .env
   else
     echo "ERROR: No .env file. Copy .env.server.example to .env and set passwords." >&2

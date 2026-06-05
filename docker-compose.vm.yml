@@ -1,0 +1,40 @@
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: skillvault-backend
+
+    env_file:
+      - ./backend/.env
+
+    ports:
+      - "8002:8000"
+
+    networks:
+      - email-intelligence_default
+
+    volumes:
+      - ./backend/uploads:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    container_name: skillvault-frontend
+
+    ports:
+      - "3005:80"
+
+    depends_on:
+      - backend
+
+    networks:
+      - email-intelligence_default
+
+networks:
+  email-intelligence_default:
+    external: true

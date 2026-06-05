@@ -1,4 +1,4 @@
-# TechBank.ai / SkillVault — shared-server deploy (does not bind host 80/443)
+# TechBank.ai / SkillVault - shared-server deploy (does not bind host 80/443)
 #
 # Use when another app already uses ports 80 and 443 on the same machine
 # (e.g. Email Intelligence on 172.16.200.30).

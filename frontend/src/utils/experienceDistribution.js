@@ -14,10 +14,10 @@ export function formatExperienceDistribution(counts) {
 /** Experience-year range presets for the dashboard filter. */
 export const EXPERIENCE_RANGE_OPTIONS = [
   { value: 'all', label: 'All experience levels' },
-  { value: '0-5', label: '0–5 years' },
-  { value: '6-10', label: '6–10 years' },
-  { value: '11-15', label: '11–15 years' },
-  { value: '16-20', label: '16–20 years' },
+  { value: '0-5', label: '0-5 years' },
+  { value: '6-10', label: '6-10 years' },
+  { value: '11-15', label: '11-15 years' },
+  { value: '16-20', label: '16-20 years' },
   { value: '21+', label: '21+ years' },
 ]
 

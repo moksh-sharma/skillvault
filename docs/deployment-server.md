@@ -27,7 +27,7 @@ SkillVault runs as an isolated Docker Compose project named **`skillvault`** wit
 
 ---
 
-## 1. Pre-flight — check ports
+## 1. Pre-flight - check ports
 
 **Linux:**
 
@@ -130,7 +130,7 @@ Do not remove rules for the existing application.
 
 ---
 
-## 7. Optional — host nginx subdomain (keep :80 for other app)
+## 7. Optional - host nginx subdomain (keep :80 for other app)
 
 If the host already has nginx on **80**, add a **new** `server` block only (see `nginx/nginx.host-proxy.example.conf`), proxying to `127.0.0.1:8080`:
 
@@ -151,7 +151,7 @@ Users then open `http://skillvault.yourcompany.local/` while the other tool keep
 | Stop (does not affect other Docker projects) | `docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.server.yml down` |
 | Update | `git pull && ./scripts/deploy-server.sh` |
 
-**Backups:** `postgres_data` and `backend_uploads` volumes — see [production.md](./production.md).
+**Backups:** `postgres_data` and `backend_uploads` volumes - see [production.md](./production.md).
 
 ---
 
@@ -168,7 +168,7 @@ Users then open `http://skillvault.yourcompany.local/` while the other tool keep
 | Issue | Fix |
 |-------|-----|
 | `port is already allocated` on 8080 | Set `SKILLVAULT_HTTP_PORT` in `.env` and redeploy |
-| Other app broke after deploy | You likely bound 80:80 — use only `docker-compose.server.yml`, not plain `docker compose up` |
+| Other app broke after deploy | You likely bound 80:80 - use only `docker-compose.server.yml`, not plain `docker compose up` |
 | CORS errors | Set `CORS_ORIGINS` to the exact browser URL (including port) |
 | Celery/Outlook sync idle | `docker compose ... logs celery`; check Redis password in `.env` |
 | Ollama timeouts | Shared load on `11434`; reduce parallel jobs or scale Ollama |
@@ -177,5 +177,5 @@ Users then open `http://skillvault.yourcompany.local/` while the other tool keep
 
 ## Related
 
-- [production.md](./production.md) — secrets, HTTPS certs, backups
-- [HOW_TO_RUN.md](../HOW_TO_RUN.md) — local development
+- [production.md](./production.md) - secrets, HTTPS certs, backups
+- [HOW_TO_RUN.md](../HOW_TO_RUN.md) - local development

@@ -13,7 +13,7 @@ const getPublicOrigin = () => {
   if (envOrigin) {
     return envOrigin.replace(/\/+$/, '')
   }
-  return 'http://localhost:3005'
+  return 'http://172.16.200.30:3005'
 }
 
 const getPortalPublicUrl = (path) => {

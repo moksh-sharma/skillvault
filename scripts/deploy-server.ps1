@@ -1,4 +1,4 @@
-# Deploy SkillVault on a shared server (from Windows — copies commands for SSH target)
+# Deploy SkillVault on a shared server (from Windows - copies commands for SSH target)
 # On the Linux server, run: ./scripts/deploy-server.sh
 param(
     [string]$Server = "172.16.200.30",
