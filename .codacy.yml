@@ -1,5 +1,8 @@
-tools:
-  - name: PMD
+engines:
+  pmd:
     enabled: false
-  - name: PMD-legacy
+  pmd-legacy:
     enabled: false
+
+exclude_paths:
+  - "SkillVault.sql"
