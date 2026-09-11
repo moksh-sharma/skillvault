@@ -32,3 +32,9 @@ Thumbs.db
 # Logs and temp
 *.log
 .cache/
+
+# Local DB dumps / backups
+*.dump
+current_empty_db_backup.sql
+techbank_plain.sql
+techbank_restored.sql
